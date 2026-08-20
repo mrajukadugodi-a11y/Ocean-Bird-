@@ -1,0 +1,49 @@
+{
+  "short_name": "OCEAN BIRD",
+  "name": "OCEAN BIRD Maritime Navigation & Ocean Money Portal",
+  "description": "Global Maritime Fleet Management, Commercial License Issuance, Seafarer Medical Passport, Flight Booking & Ocean Gaming Portal",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?utm_source=pwa",
+  "background_color": "#020617",
+  "theme_color": "#0284c7",
+  "display": "standalone",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["navigation", "travel", "utilities", "business", "finance"],
+  "shortcuts": [
+    {
+      "name": "Fleet Command",
+      "short_name": "Fleet",
+      "description": "View live vessel tracking and route telemetry",
+      "url": "/?tab=home"
+    },
+    {
+      "name": "Ocean Gaming & Entertainments Portal",
+      "short_name": "Ocean Gaming",
+      "description": "Access Ocean Gaming, Online Lottery, Maritime Sports Betting & $OD Wallet",
+      "url": "/?tab=ocean-gaming-lottery"
+    },
+    {
+      "name": "Health & Vaccination Hub",
+      "short_name": "Health Hub",
+      "description": "Seafarer Digital Health Passport and WHO Booking",
+      "url": "/?tab=medical-hub"
+    }
+  ],
+  "prefer_related_applications": false
+}

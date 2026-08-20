@@ -1,0 +1,10 @@
+{
+  "name": "Ocean Bird",
+  "description": "Ocean Bird by Eastman Creation — Comprehensive maritime portal for seafarers and deep-sea fisheries featuring potential fishing zones (PFZ), sea weather radar, 24x7 SOS telecom, jobs, training academies, and harbor fish market rates.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
