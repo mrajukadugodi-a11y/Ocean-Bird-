@@ -136,6 +136,7 @@ import { VesselEfficiencyChartPortal } from './components/VesselEfficiencyChartP
 import { SuperMasterDarkWebAndCyberShieldAgent } from './components/SuperMasterDarkWebAndCyberShieldAgent';
 import { OceanPlasticRadarPortal } from './components/OceanPlasticRadarPortal';
 import { OceanEnvironmentLibraryPortal } from './components/OceanEnvironmentLibraryPortal';
+import { OceanMiningEngineeringPortalView } from './components/OceanMiningEngineeringPortalView';
 import { ToastContainer, ToastItem } from './components/ToastContainer';
 import { REGIONAL_CLIMATE_ALERTS } from './data/southAsiaData';
 import { ClimateAlert } from './types';
@@ -202,7 +203,17 @@ export default function App() {
   const [isSimulatingFeeder, setIsSimulatingFeeder] = useState<boolean>(true);
   const prevAlertsJsonRef = useRef<string>('');
 
-  // Auto-dismiss toasts after 8 seconds
+  // Handle initial deep-linking from URL query parameters (e.g. ?tab=climate&alertId=GCA-ATL-01)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    const alertIdParam = params.get('alertId') || params.get('alert') || params.get('event');
+    if (alertIdParam || tabParam === 'climate') {
+      setActiveTab('climate');
+    } else if (tabParam) {
+      setActiveTab(tabParam as NavTabType);
+    }
+  }, []);
   useEffect(() => {
     if (toasts.length === 0) return;
     const timer = setTimeout(() => {
@@ -341,6 +352,7 @@ export default function App() {
       )}
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 xl:pb-8">
+        {activeTab === 'ocean-mining-engineering' && <OceanMiningEngineeringPortalView />}
         {activeTab === 'ocean-environment-library' && <OceanEnvironmentLibraryPortal />}
         {activeTab === 'ocean-plastic-radar' && <OceanPlasticRadarPortal />}
         {activeTab === 'vessels-efficiency-chart' && <VesselEfficiencyChartPortal />}

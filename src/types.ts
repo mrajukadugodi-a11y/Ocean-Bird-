@@ -847,5 +847,165 @@ export interface VaccineBookingRecord {
   createdAt: string;
 }
 
+export interface WorldwideFisheriesPort {
+  id: string;
+  portName: string;
+  cityName: string;
+  country: string;
+  countryFlag: string;
+  continent: 'Asia' | 'Europe' | 'North America' | 'South America' | 'Africa' | 'Oceania' | 'Middle East' | 'Antarctica';
+  oceanBasin: string;
+  lat: number;
+  lng: number;
+  unLocode: string;
+  annualCatchVolumeMT: number;
+  annualSeafoodTradeUSD: number;
+  registeredVesselsCount: number;
+  coldStorageCapacityMT: number;
+  primarySpecies: string[];
+  processingPlantsCount: number;
+  keyExportDestinations: string[];
+  auctionType: 'Automated Digital Auction' | 'Live Open Cry Bidding' | 'Direct Processor Contract' | 'Cooperative Wholesale Market';
+  sustainabilityCertifications: string[];
+  facilities: string[];
+  description: string;
+}
+
+export interface GlobalSeafoodMarketAndTrade {
+  id: string;
+  speciesName: string;
+  scientificName: string;
+  category: 'Pelagic Fish' | 'Demersal Fish' | 'Crustacean' | 'Mollusks & Cephalopods' | 'Aquaculture / Farmed' | 'Fishmeal & Oil';
+  primaryExportingCountries: string[];
+  primaryImportingCountries: string[];
+  globalWholesalePricePerKgUSD: number;
+  priceTrendPct30d: number;
+  marketDemandLevel: 'Very High Demand' | 'High Demand' | 'Stable' | 'Moderate';
+  primaryMarketingChannels: string[];
+  seasonalPeakMonths: string;
+  tariffAndTradeNotes: string;
+  marketCapOrVolumeUSD: string;
+}
+
+export interface GlobalFisheriesTradeReport {
+  id: string;
+  reportTitle: string;
+  reportingPeriod: string;
+  regionScope: 'Global' | 'Asia-Pacific' | 'Europe & North Atlantic' | 'Americas (North & South)' | 'Africa & Indian Ocean' | 'Middle East & Red Sea';
+  exportVolumeMT: number;
+  exportValueUSD: number;
+  importVolumeMT: number;
+  importValueUSD: number;
+  topExporters: { country: string; flag: string; sharePct: number; valueUSD: number }[];
+  topImporters: { country: string; flag: string; sharePct: number; valueUSD: number }[];
+  majorTradedSpecies: { species: string; volumeMT: number; avgPricePerKgUSD: number }[];
+  iuuComplianceRating: 'Tier 1 (Fully Compliant)' | 'Tier 2 (Monitored)' | 'High Risk Warning';
+  sustainabilityOverview: string;
+  tradeTariffAndPolicyInsight: string;
+}
+
+export interface PortInventoryStock {
+  id: string;
+  portId: string;
+  portName: string;
+  cityName: string;
+  country: string;
+  countryFlag: string;
+  unLocode: string;
+  totalCapacityMT: number;
+  currentOccupiedMT: number;
+  utilizationPct: number;
+  frozenStockMT: number;
+  freshChilledStockMT: number;
+  reeferContainersOnSite: number;
+  incomingShipmentsMT: number;
+  outgoingShipmentsMT: number;
+  speciesBreakdown: { species: string; volumeMT: number; tempStorageC: number; expiryAlertDays: number }[];
+  lastAuditTimestamp: string;
+  warehouseStatus: 'OPERATIONAL_NORMAL' | 'NEAR_CAPACITY_ALERT' | 'HIGH_DEMAND_VACANCY' | 'MAINTENANCE_FREEZE';
+}
+
+export interface AutomatedTradeReportConfig {
+  id: string;
+  reportName: string;
+  frequency: 'Daily Market Intelligence' | 'Weekly FAO Dispatches' | 'Monthly IMO Trade Balance' | 'Real-Time Price Spike Alert';
+  regionScope: string;
+  autoRecipients: string[];
+  lastGeneratedTimestamp: string;
+  nextScheduledRun: string;
+  status: 'ACTIVE' | 'PAUSED';
+  generatedReportCount: number;
+  deliveryChannel: 'Email API + Webhook' | 'Satellite Maritime Dispatch' | 'B2B FTP / Cloud Sync';
+}
+
+export interface GlobalMarketSyncFeed {
+  exchangeName: string;
+  location: string;
+  countryFlag: string;
+  status: 'ONLINE_LIVE_FEED' | 'AUCTION_IN_PROGRESS' | 'SYNCED_RECENTLY';
+  lastSyncedAt: string;
+  latencyMs: number;
+  activeListingsCount: number;
+  primaryTradedCommodity: string;
+}
+
+export interface TradeComplianceCheckRequest {
+  consignmentId: string;
+  exporterCountry: string;
+  importerCountry: string;
+  speciesName: string;
+  hsCode: string;
+  vesselNameIMO: string;
+  catchAreaFAO: string;
+  quantityMT: number;
+  declaringValueUSD: number;
+  hasSimpApproval: boolean;
+  hasEuCatchCert: boolean;
+  hasCitesPermit: boolean;
+  hasHealthCertificate: boolean;
+  catchDate: string;
+}
+
+export interface TradeComplianceResult {
+  overallRiskLevel: 'LOW_RISK_APPROVED' | 'MODERATE_RISK_AUDIT' | 'HIGH_RISK_REJECTED';
+  complianceScorePct: number;
+  iuuStatus: string;
+  simpStatus: string;
+  euCertStatus: string;
+  tariffEstimatePct: number;
+  estimatedTariffUSD: number;
+  spsHealthCheck: string;
+  flaggedRisks: string[];
+  recommendedActions: string[];
+  auditRefCode: string;
+  generatedAt: string;
+}
+
+export interface B2bSeafoodContract {
+  contractId: string;
+  sellerCompany: string;
+  sellerCountry: string;
+  buyerCompany: string;
+  buyerCountry: string;
+  incoterm: 'FOB (Free on Board)' | 'CIF (Cost, Insurance & Freight)' | 'CFR (Cost & Freight)' | 'DDP (Delivered Duty Paid)';
+  portOfLoading: string;
+  portOfDischarge: string;
+  speciesGrade: string;
+  processingFormat: 'IQF Fillets' | 'Super-Frozen (-60°C) Whole' | 'H&G Frozen Blocks' | 'Fresh Chilled Whole' | 'Refined Fishmeal Drums';
+  quantityMT: number;
+  pricePerKgUSD: number;
+  totalContractValueUSD: number;
+  storageTempReqC: number;
+  shipmentWindowStart: string;
+  shipmentWindowEnd: string;
+  paymentTerms: 'Letter of Credit (L/C 100% Sight)' | 'Telegraphic Transfer (T/T 30% Advance / 70% BL)' | 'CAD (Cash Against Documents)';
+  governingLaw: string;
+  createdDate: string;
+  status: 'DRAFT' | 'EXECUTED_PENDING_SHIPMENT' | 'VERIFIED_CUSTOMS';
+}
+
+
+
+
 
 

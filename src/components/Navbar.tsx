@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import oceanBirdLogo from '../assets/images/ocean_bird_logo_1785499834795.jpg';
-import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library } from 'lucide-react';
+import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe } from 'lucide-react';
 import { LanguageSelector } from '../utils/languageUtils';
 import { AutoTranslationBar } from './AutoTranslationBar';
 import { hapticEngine } from '../utils/hapticUtils';
 
 export type NavTabType =
+  | 'ocean-mining-engineering'
   | 'ocean-environment-library'
   | 'ocean-plastic-radar'
   | 'vessels-efficiency-chart'
@@ -289,6 +290,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   }
 
   const navItems: NavItem[] = [
+    { id: 'ocean-mining-engineering', label: 'Ocean Mining & Offshore Engineering Studies Portal (Online & Offline)', icon: Pickaxe, color: 'text-amber-400', badge: 'MINING STUDIES' },
     { id: 'ocean-environment-library', label: 'Ocean Environment Knowledge & Research Library Portal', icon: Library, color: 'text-emerald-400', badge: 'RESEARCH LIBRARY' },
     { id: 'ocean-plastic-radar', label: 'Global Ocean Plastic & Microplastic Radar', icon: Waves, color: 'text-teal-400', badge: 'PLASTIC RADAR' },
     { id: 'vessels-efficiency-chart', label: 'Vessels Hydrodynamic Efficiency & Power Curve Chart', icon: Gauge, color: 'text-cyan-400', badge: 'FOC & CII CHART' },

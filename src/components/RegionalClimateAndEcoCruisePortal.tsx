@@ -372,6 +372,28 @@ export const RegionalClimateAndEcoCruisePortal: React.FC = () => {
   const [isAudioEchoEnabled, setIsAudioEchoEnabled] = useState<boolean>(true);
   const [alertFilterSeverity, setAlertFilterSeverity] = useState<'ALL' | 'CRITICAL' | 'HIGH' | 'MODERATE'>('ALL');
   const [actionSuccessMsg, setActionSuccessMsg] = useState<string | null>(null);
+  const [copiedEchoAlertId, setCopiedEchoAlertId] = useState<string | null>(null);
+
+  const handleShareEchoAlert = (alert: AutomatedEchoAlert) => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const deepLinkUrl = `${baseUrl}?tab=regional&alertId=${encodeURIComponent(alert.id)}`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: `[ACOUSTIC ECHO ALERT] ${alert.title}`,
+        text: `${alert.title}: ${alert.description} (${alert.region} - ${alert.coordinates})`,
+        url: deepLinkUrl
+      }).catch(() => {
+        navigator.clipboard.writeText(deepLinkUrl);
+        setCopiedEchoAlertId(alert.id);
+        setTimeout(() => setCopiedEchoAlertId(null), 3000);
+      });
+    } else {
+      navigator.clipboard.writeText(deepLinkUrl);
+      setCopiedEchoAlertId(alert.id);
+      setTimeout(() => setCopiedEchoAlertId(null), 3000);
+    }
+  };
 
   // Gamification State
   const [userXpPoints, setUserXpPoints] = useState<number>(4250);
@@ -883,6 +905,15 @@ export const RegionalClimateAndEcoCruisePortal: React.FC = () => {
                   </span>
 
                   <div className="flex items-center space-x-2 shrink-0">
+                    <button
+                      onClick={() => handleShareEchoAlert(alert)}
+                      className="py-1 px-2.5 bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500 hover:text-slate-950 border border-cyan-500/40 font-bold text-[10px] uppercase rounded-lg transition-all flex items-center space-x-1"
+                      title="Share Echo alert deep-link"
+                    >
+                      <Share2 className="w-3 h-3" />
+                      <span>{copiedEchoAlertId === alert.id ? 'Copied Link!' : 'Share'}</span>
+                    </button>
+
                     {alert.status !== 'RESOLVED' ? (
                       <button
                         onClick={() => handleResolveAlert(alert.id)}

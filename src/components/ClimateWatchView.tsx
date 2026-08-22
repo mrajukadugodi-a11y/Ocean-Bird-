@@ -32,7 +32,18 @@ import {
   Grid,
   Waves,
   Droplets,
-  Wind
+  Wind,
+  Share2,
+  Copy,
+  Check,
+  ExternalLink,
+  Send,
+  FileText,
+  X,
+  MessageSquare,
+  Mail,
+  Download,
+  Link
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -393,6 +404,84 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
   const [activePeriod, setActivePeriod] = useState<'morning' | 'afternoon' | 'evening' | 'night'>('afternoon');
   const [activeModuleTab, setActiveModuleTab] = useState<'ALL' | 'SCENARIOS' | 'BIODIVERSITY' | 'COMPARE_PORTS' | 'EXPORT_REPORT'>('ALL');
   const [downloadSuccessMsg, setDownloadSuccessMsg] = useState('');
+
+  // SHARE DEEP-LINK ALERT STATE
+  const [shareModalAlert, setShareModalAlert] = useState<GlobalClimateAlertExtended | null>(null);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [copiedDispatchText, setCopiedDispatchText] = useState<boolean>(false);
+  const [highlightedAlertId, setHighlightedAlertId] = useState<string | null>(null);
+  const alertsSectionRef = React.useRef<HTMLDivElement>(null);
+
+  // Detect URL search parameter for shared alert deep-link on mount or location change
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const alertParam = params.get('alertId') || params.get('alert') || params.get('event');
+    if (alertParam) {
+      setHighlightedAlertId(alertParam);
+      setTimeout(() => {
+        if (alertsSectionRef.current) {
+          alertsSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    }
+  }, []);
+
+  const handleOpenShareModal = (alert: GlobalClimateAlertExtended) => {
+    setShareModalAlert(alert);
+    setCopiedLink(false);
+    setCopiedDispatchText(false);
+  };
+
+  const generateDeepLinkUrl = (alertId: string) => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?tab=climate&alertId=${encodeURIComponent(alertId)}`;
+  };
+
+  const generateDispatchText = (alert: GlobalClimateAlertExtended) => {
+    const deepLink = generateDeepLinkUrl(alert.id);
+    return `[MARITIME HYDRO-MET DEEP-LINK DISPATCH]
+ALERT ID      : ${alert.id}
+EVENT TITLE   : ${alert.title}
+SEVERITY      : ${alert.severity.toUpperCase()}
+REGION        : ${alert.region} (${alert.coordinates})
+HAZARD STATS  : Gusts ${alert.maxWindGustsKnots} kts | Swell ${alert.maxWaveHeightM}m | Rain ${alert.expectedRainfallMm}mm
+AFFECTED PORTS: ${alert.affectedPorts.join(', ')}
+ISSUING AUTH  : ${alert.issuingAuthority}
+
+DIRECT OPERATOR DEEP-LINK:
+${deepLink}`;
+  };
+
+  const handleCopyLink = (alertId: string) => {
+    const link = generateDeepLinkUrl(alertId);
+    navigator.clipboard.writeText(link);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 3000);
+  };
+
+  const handleCopyDispatchText = (alert: GlobalClimateAlertExtended) => {
+    const dispatchText = generateDispatchText(alert);
+    navigator.clipboard.writeText(dispatchText);
+    setCopiedDispatchText(true);
+    setTimeout(() => setCopiedDispatchText(false), 3000);
+  };
+
+  const handleNativeShare = async (alert: GlobalClimateAlertExtended) => {
+    const link = generateDeepLinkUrl(alert.id);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `[MARITIME ADVISORY] ${alert.title}`,
+          text: `${alert.title} - ${alert.description} (${alert.severity} Severity)`,
+          url: link
+        });
+      } catch (err) {
+        console.log('Share canceled or not supported', err);
+      }
+    } else {
+      handleCopyLink(alert.id);
+    }
+  };
 
   // PUBLISHED APP IMPACT DASHBOARD STATE
   const [publishedImpactActiveTab, setPublishedImpactActiveTab] = useState<'OVERVIEW' | 'TELEMETRY' | 'REACH_MAP' | 'LIVES_SAVED'>('OVERVIEW');
@@ -1044,7 +1133,7 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
       </div>
 
       {/* GLOBAL CLIMATE ALERTS & BULLETINS GRID */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white space-y-6 font-mono text-xs">
+      <div ref={alertsSectionRef} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white space-y-6 font-mono text-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
           <div>
             <div className="flex items-center space-x-2 text-rose-400 text-xs font-bold uppercase tracking-wider mb-1">
@@ -1075,6 +1164,23 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
           </div>
         </div>
 
+        {highlightedAlertId && (
+          <div className="p-3 bg-cyan-500/20 border border-cyan-400 text-cyan-200 rounded-xl text-xs font-bold flex items-center justify-between animate-fadeIn">
+            <div className="flex items-center space-x-2">
+              <Share2 className="w-4 h-4 text-cyan-400 animate-pulse shrink-0" />
+              <span>
+                Viewing Shared Deep-Link Event: <strong className="text-white">{highlightedAlertId}</strong>
+              </span>
+            </div>
+            <button
+              onClick={() => setHighlightedAlertId(null)}
+              className="text-slate-400 hover:text-white underline text-[11px]"
+            >
+              Show All Alerts
+            </button>
+          </div>
+        )}
+
         {downloadSuccessMsg && (
           <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-xl text-xs flex items-center space-x-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -1085,21 +1191,33 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredAlerts.map((alert) => {
             const isAck = acknowledgedAlerts.includes(alert.id);
+            const isHighlighted = highlightedAlertId === alert.id;
+
             return (
               <div
                 key={alert.id}
+                id={`alert-${alert.id}`}
                 className={`p-5 rounded-2xl border space-y-4 flex flex-col justify-between transition-all ${
-                  alert.severity === 'Critical'
+                  isHighlighted
+                    ? 'ring-4 ring-cyan-400 border-cyan-400 bg-cyan-950/60 shadow-2xl scale-[1.01]'
+                    : alert.severity === 'Critical'
                     ? 'bg-rose-950/30 border-rose-800/80 hover:border-rose-500'
                     : 'bg-amber-950/30 border-amber-800/80 hover:border-amber-500'
                 }`}
               >
                 <div className="space-y-3">
+                  {isHighlighted && (
+                    <div className="flex items-center space-x-1.5 text-cyan-300 text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 border border-cyan-400/50 px-2.5 py-1 rounded-lg w-fit">
+                      <Share2 className="w-3 h-3 text-cyan-400 animate-spin" />
+                      <span>📍 SHARED DEEP LINK EVENT</span>
+                    </div>
+                  )}
+
                   <div className="flex items-start justify-between">
                     <div>
                       <span className="text-base mr-1">{alert.countryFlag}</span>
                       <span className="font-bold text-cyan-400">{alert.country}</span>
-                      <span className="text-slate-500 text-[10px] block">{alert.region}</span>
+                      <span className="text-slate-500 text-[10px] block">{alert.region} • ID: {alert.id}</span>
                     </div>
 
                     <span
@@ -1150,6 +1268,15 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
 
                   <div className="flex items-center space-x-2">
                     <button
+                      onClick={() => handleOpenShareModal(alert)}
+                      className="px-3 py-1 rounded-xl bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500 hover:text-slate-950 border border-cyan-500/40 font-bold transition-all flex items-center space-x-1"
+                      title="Generate shareable deep link for maritime operators"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>Share</span>
+                    </button>
+
+                    <button
                       onClick={() => toggleAcknowledge(alert.id)}
                       className={`px-3 py-1 rounded-xl font-bold transition-all ${
                         isAck ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-300'
@@ -1160,7 +1287,7 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
 
                     <button
                       onClick={() => handleDownloadBulletin(alert.title)}
-                      className="px-3 py-1 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold"
+                      className="px-3 py-1 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 font-bold hover:text-white"
                     >
                       Bulletin
                     </button>
@@ -1579,6 +1706,134 @@ export const ClimateWatchView: React.FC<ClimateWatchViewProps> = ({ onOpenRouteR
           </div>
         </div>
       </div>
+
+      {/* SHARE DEEP-LINK ALERT MODAL */}
+      {shareModalAlert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-cyan-500/50 rounded-2xl max-w-xl w-full p-6 text-white space-y-5 font-mono shadow-2xl relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setShareModalAlert(null)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="flex items-center space-x-3 border-b border-slate-800 pb-3">
+              <div className="p-2.5 bg-cyan-500/20 border border-cyan-500/40 rounded-xl text-cyan-400 shrink-0">
+                <Share2 className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider block">
+                  MARITIME DEEP-LINK EVENT DISPATCH
+                </span>
+                <h3 className="text-lg font-black text-white flex items-center space-x-2">
+                  <span>{shareModalAlert.countryFlag} {shareModalAlert.title}</span>
+                </h3>
+                <span className="text-slate-400 text-xs font-mono">
+                  ALERT ID: {shareModalAlert.id} • {shareModalAlert.severity.toUpperCase()} SEVERITY
+                </span>
+              </div>
+            </div>
+
+            {/* Event Overview Summary */}
+            <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+              <div className="flex justify-between items-center text-[10px] text-slate-400">
+                <span>Region: {shareModalAlert.region}</span>
+                <span className="text-cyan-400 font-bold">{shareModalAlert.coordinates}</span>
+              </div>
+              <p className="text-slate-300 font-sans text-xs">{shareModalAlert.description}</p>
+              <div className="flex gap-3 text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-900">
+                <span>Gusts: <strong className="text-rose-400">{shareModalAlert.maxWindGustsKnots} kts</strong></span>
+                <span>Swell: <strong className="text-amber-400">{shareModalAlert.maxWaveHeightM}m</strong></span>
+                <span>Rain: <strong className="text-cyan-300">{shareModalAlert.expectedRainfallMm}mm</strong></span>
+              </div>
+            </div>
+
+            {/* Shareable URL Input Section */}
+            <div className="space-y-1.5 text-xs">
+              <label className="text-slate-400 text-[10px] font-bold uppercase block flex items-center justify-between">
+                <span>SHAREABLE DEEP-LINK URL</span>
+                {copiedLink && <span className="text-emerald-400 font-bold">✓ Copied to Clipboard!</span>}
+              </label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={generateDeepLinkUrl(shareModalAlert.id)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-cyan-300 font-mono text-xs select-all focus:outline-none"
+                />
+                <button
+                  onClick={() => handleCopyLink(shareModalAlert.id)}
+                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 font-black text-xs uppercase rounded-xl shadow-lg transition-all flex items-center space-x-1.5 shrink-0 hover:scale-105"
+                >
+                  {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedLink ? 'Copied!' : 'Copy Link'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* VHF / Inmarsat Formatted Telemetry Text Box */}
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center justify-between">
+                <label className="text-slate-400 text-[10px] font-bold uppercase block">
+                  MARITIME TELEMETRY DISPATCH FORMAT (VHF/INMARSAT/SATCOM)
+                </label>
+                {copiedDispatchText && <span className="text-emerald-400 font-bold text-[10px]">✓ Dispatch Text Copied!</span>}
+              </div>
+              <textarea
+                readOnly
+                rows={5}
+                value={generateDispatchText(shareModalAlert)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300 font-mono text-[11px] leading-relaxed resize-none focus:outline-none"
+              />
+              <button
+                onClick={() => handleCopyDispatchText(shareModalAlert)}
+                className="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all flex items-center justify-center space-x-2"
+              >
+                {copiedDispatchText ? <Check className="w-4 h-4 text-emerald-400" /> : <FileText className="w-4 h-4 text-amber-400" />}
+                <span>{copiedDispatchText ? 'Copied Dispatch Text' : 'Copy Formatted Telemetry Dispatch'}</span>
+              </button>
+            </div>
+
+            {/* Quick External Operator Share Channels */}
+            <div className="pt-2 border-t border-slate-800 space-y-2">
+              <span className="text-[10px] text-slate-400 font-bold uppercase block">DIRECT OPERATOR CHANNELS</span>
+              <div className="grid grid-cols-3 gap-2 text-xs font-bold">
+                {/* WhatsApp */}
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(generateDispatchText(shareModalAlert))}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 rounded-xl flex items-center justify-center space-x-1.5 hover:bg-emerald-900/60 transition-all text-[11px]"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>WhatsApp</span>
+                </a>
+
+                {/* Email */}
+                <a
+                  href={`mailto:?subject=${encodeURIComponent(`[MARITIME ADVISORY DEEP-LINK] ${shareModalAlert.title}`)}&body=${encodeURIComponent(generateDispatchText(shareModalAlert))}`}
+                  className="p-2.5 bg-sky-950/40 border border-sky-500/40 text-sky-300 rounded-xl flex items-center justify-center space-x-1.5 hover:bg-sky-900/60 transition-all text-[11px]"
+                >
+                  <Mail className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Email</span>
+                </a>
+
+                {/* Native Mobile Share */}
+                <button
+                  onClick={() => handleNativeShare(shareModalAlert)}
+                  className="p-2.5 bg-purple-950/40 border border-purple-500/40 text-purple-300 rounded-xl flex items-center justify-center space-x-1.5 hover:bg-purple-900/60 transition-all text-[11px]"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-purple-400" />
+                  <span>More Apps</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
