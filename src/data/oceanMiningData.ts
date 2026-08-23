@@ -125,6 +125,51 @@ export interface OceanMiningJob {
   applyDeadline: string;
 }
 
+export interface OceanMiningInstitute {
+  id: string;
+  name: string;
+  shortName: string;
+  country: string;
+  region: 'India' | 'Asia-Pacific' | 'Europe' | 'North America';
+  cityState: string;
+  fullAddress: string;
+  postalCode: string;
+  coordinates: { lat: number; lng: number };
+  website: string;
+  contactEmail: string;
+  contactPhone: string;
+  establishedYear: number;
+  accreditation: string;
+  rankingOrReputation: string;
+  programsOffered: {
+    degree: string;
+    title: string;
+    duration: string;
+    mode: 'Full-time On-Campus' | 'Hybrid / Online Study' | 'Research Fellowship';
+    description: string;
+  }[];
+  specializedLabsAndFacilities: string[];
+  keyResearchAreas: string[];
+  isaPartnershipStatus: 'ISA Training Co-Sponsor' | 'National EEZ Contractor' | 'Research Collaborator' | 'Academic Member';
+  description: string;
+  isBookmarked?: boolean;
+}
+
+export interface InstituteInquiry {
+  id: string;
+  instituteId: string;
+  instituteName: string;
+  applicantName: string;
+  email: string;
+  phone: string;
+  country: string;
+  qualification: string;
+  programType: string;
+  inquiryType: 'Admissions' | 'Research Collaboration' | 'ISA Fellowship' | 'Campus Visit';
+  message: string;
+  submissionDate: string;
+}
+
 export interface EngineeringStudyDetail {
   id: string;
   category: string;
@@ -1024,4 +1069,525 @@ Fine pelagic silt particles (<10 micrometers) exhibit slow Stokes settling veloc
 3) Real-time autonomous turbidity sensor networks triggering automated collection pauses when NTU thresholds exceed 5.0.`
   }
 ];
+
+export const INITIAL_OCEAN_MINING_INSTITUTES: OceanMiningInstitute[] = [
+  {
+    id: 'inst-niot-chennai',
+    name: 'National Institute of Ocean Technology (NIOT)',
+    shortName: 'NIOT Chennai',
+    country: 'India',
+    region: 'India',
+    cityState: 'Chennai, Tamil Nadu',
+    fullAddress: 'Velachery - Tambaram Main Road, Narayanapuram, Pallikaranai, Chennai, Tamil Nadu 600100, India',
+    postalCode: '600100',
+    coordinates: { lat: 12.9382, lng: 80.2078 },
+    website: 'https://www.niot.res.in',
+    contactEmail: 'admissions.deepocean@niot.res.in',
+    contactPhone: '+91 44 6678 3300',
+    establishedYear: 1993,
+    accreditation: 'Autonomous R&D Institute under Ministry of Earth Sciences (MoES), Govt of India',
+    rankingOrReputation: 'Lead Institute for India Deep Ocean Mission & ISA Co-Sponsor',
+    programsOffered: [
+      {
+        degree: 'Ph.D. & Post-Doc Fellowships',
+        title: 'Deep-Sea Mining Technology & Subsea Vehicle Robotics',
+        duration: '3 - 5 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Pioneering research on 6,000m abyssal nodule collector crawlers, riser slurry hydraulics, and underwater acoustics.'
+      },
+      {
+        degree: 'M.Tech Thesis Research Program',
+        title: 'Offshore Structures & Subsea Mining Hydraulics',
+        duration: '1 - 2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Joint thesis program with IIT Madras and CUSAT focusing on slurry pump wear and hyperbaric pressure testing.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      '6,000m Hyperbaric Seawater Test Chamber (600 bar)',
+      'Subsea Crawler Mining Vehicle Assembly & Prototyping Bay',
+      'Acoustic Calibration & Transducer Test Tank',
+      'RV Sagar Nidhi Expedition Vessel Base'
+    ],
+    keyResearchAreas: [
+      'Polymetallic Nodule Collectors & Tracked Crawlers',
+      'Vertical Riser Slurry Transport Hydraulics',
+      'Benthic Sediment Resuspension Plume Containment'
+    ],
+    isaPartnershipStatus: 'ISA Training Co-Sponsor',
+    description: 'NIOT is India premier ocean engineering institute spearheading the national Deep Ocean Mission ($500M budget). NIOT designed and successfully shallow-water tested the 5,000m Varaha deep-sea nodule collector and acoustic seabed mapper.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-iit-madras',
+    name: 'Indian Institute of Technology Madras (IIT Madras) - Dept of Ocean Engineering',
+    shortName: 'IIT Madras (Ocean Engg)',
+    country: 'India',
+    region: 'India',
+    cityState: 'Chennai, Tamil Nadu',
+    fullAddress: 'IIT P.O., Sardar Patel Road, Adyar, Chennai, Tamil Nadu 600036, India',
+    postalCode: '600036',
+    coordinates: { lat: 12.9915, lng: 80.2337 },
+    website: 'https://oe.iitm.ac.in',
+    contactEmail: 'dsoe@iitm.ac.in',
+    contactPhone: '+91 44 2257 4800',
+    establishedYear: 1977,
+    accreditation: 'Institute of National Importance (NIRF #1 Engineering Category in India)',
+    rankingOrReputation: 'Top Ocean Engineering Department in South Asia',
+    programsOffered: [
+      {
+        degree: 'B.Tech / Dual Degree',
+        title: 'Naval Architecture and Ocean Engineering',
+        duration: '4 - 5 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Comprehensive curriculum covering marine hydrodynamics, wave mechanics, and subsea pipeline design.'
+      },
+      {
+        degree: 'M.Tech',
+        title: 'Ocean Engineering & Subsea Technology',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Specialization in deepwater riser dynamics, wave-structure interaction, and subsea robotics.'
+      },
+      {
+        degree: 'Ph.D.',
+        title: 'Hydrodynamic Slurry Transport & Deepwater Riser Mechanics',
+        duration: '3 - 5 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Advanced numerical modeling (CFD/DEM) of polymetallic nodule transport in 4,000m vertical pipes.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      '90m Towing Tank with Wave Generator',
+      'Deepwater Wave Basin & Wave Flume',
+      'Dynamic Slurry Pipeline Erosion Test Rig',
+      'Marine Geomechanics Soil Testing Lab'
+    ],
+    keyResearchAreas: [
+      'Deepwater Riser Pipe Dynamic Response',
+      'Subsea Pipeline Scour & Geotechnics',
+      'Wave Action on Surface Mining Support Vessels (SPVs)'
+    ],
+    isaPartnershipStatus: 'Research Collaborator',
+    description: 'The Department of Ocean Engineering at IIT Madras is a global center of excellence in ocean hydrodynamics, offshore structure design, and deepwater riser mechanics, maintaining active research ties with NIOT and international offshore industries.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-iit-kgp',
+    name: 'Indian Institute of Technology Kharagpur - Dept of Ocean Engineering & Naval Architecture',
+    shortName: 'IIT Kharagpur (OENA)',
+    country: 'India',
+    region: 'India',
+    cityState: 'Kharagpur, West Bengal',
+    fullAddress: 'IIT Kharagpur Main Campus, Kharagpur, West Bengal 721302, India',
+    postalCode: '721302',
+    coordinates: { lat: 22.3149, lng: 87.3105 },
+    website: 'https://www.iitkgp.ac.in/department/NA',
+    contactEmail: 'head@na.iitkgp.ac.in',
+    contactPhone: '+91 3222 282283',
+    establishedYear: 1952,
+    accreditation: 'Institute of National Importance (IoE)',
+    rankingOrReputation: 'Oldest Naval Architecture & Ocean Engineering Department in India',
+    programsOffered: [
+      {
+        degree: 'B.Tech',
+        title: 'Ocean Engineering and Naval Architecture',
+        duration: '4 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Core marine engineering, ship resistance, computational fluid dynamics, and offshore platforms.'
+      },
+      {
+        degree: 'M.Tech',
+        title: 'Subsea Engineering & Offshore Structural Design',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Advanced focus on deepwater production units, riser dynamics, and subsea mining equipment.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      '150m Ship Model Testing Tank & Cavitation Tunnel',
+      'Computational Marine Hydrodynamics Supercomputing Cluster',
+      'Subsea Material Fatigue & Corrosion Testing Facility'
+    ],
+    keyResearchAreas: [
+      'Subsea Collector Vehicle Hydrodynamics',
+      'Riser Clogging Prevention & Slurry Transport',
+      'Offshore Mining Support Vessel Station-Keeping & DP'
+    ],
+    isaPartnershipStatus: 'Research Collaborator',
+    description: 'IIT Kharagpur pioneered ocean engineering education in India. Its department works on cutting-edge CFD modeling of multi-phase nodule slurry flow, subsea crawler traction mechanics, and dynamic positioning for surface production ships.',
+    isBookmarked: false
+  },
+  {
+    id: 'inst-nio-goa',
+    name: 'CSIR - National Institute of Oceanography (NIO)',
+    shortName: 'CSIR-NIO Goa',
+    country: 'India',
+    region: 'India',
+    cityState: 'Dona Paula, Panaji, Goa',
+    fullAddress: 'CSIR-NIO Campus, Dona Paula, Panaji, Goa 403004, India',
+    postalCode: '403004',
+    coordinates: { lat: 15.4589, lng: 73.8037 },
+    website: 'https://www.nio.org',
+    contactEmail: 'oceanography@nio.org',
+    contactPhone: '+91 832 2450 450',
+    establishedYear: 1966,
+    accreditation: 'Constituent Laboratory of Council of Scientific & Industrial Research (CSIR)',
+    rankingOrReputation: 'India Premier Deep-Sea Marine Geological & Environmental Research Center',
+    programsOffered: [
+      {
+        degree: 'Ph.D. & Postdoctoral Fellowships',
+        title: 'Marine Geology, Geophysics & Deep-Sea Mineral Resource Mapping',
+        duration: '3 - 5 Years',
+        mode: 'Research Fellowship',
+        description: 'Hands-on research on polymetallic nodule abundance, seabed bathymetry, and benthic ecosystem baseline monitoring.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'RV Sindhu Sadhana Research Vessel Base',
+      'Abyssal Sediment Coring & Geochemical Analytical Lab',
+      'Deep Ocean Optical Backscatter & Plume Simulation Lab'
+    ],
+    keyResearchAreas: [
+      'Central Indian Ocean Basin (CIOB) Nodule Grade Assessment',
+      'Environmental Impact Assessment (EIA) of Deep-Sea Mining',
+      'Acoustic Seabed Mapping & Hydrothermal Vent Biology'
+    ],
+    isaPartnershipStatus: 'National EEZ Contractor',
+    description: 'CSIR-NIO led India initial exploration of polymetallic nodules in the Central Indian Ocean Basin, granting India pioneer investor status with the International Seabed Authority (ISA). NIO conducts crucial benthic environmental baseline studies.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-cusat-kochi',
+    name: 'Cochin University of Science and Technology (CUSAT) - School of Ocean Engineering',
+    shortName: 'CUSAT Kochi',
+    country: 'India',
+    region: 'India',
+    cityState: 'Kochi, Kerala',
+    fullAddress: 'University Road, South Kalamassery, Kalamassery, Kochi, Kerala 682022, India',
+    postalCode: '682022',
+    coordinates: { lat: 10.0452, lng: 76.3218 },
+    website: 'https://cusat.ac.in',
+    contactEmail: 'marinegeo@cusat.ac.in',
+    contactPhone: '+91 484 257 2258',
+    establishedYear: 1971,
+    accreditation: 'NAAC A+ Accredited State University',
+    rankingOrReputation: 'Leading Coastal & Marine Sciences University in South India',
+    programsOffered: [
+      {
+        degree: 'M.Tech',
+        title: 'Ocean Technology & Marine Geotechnics',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Geotechnical soil mechanics, underwater acoustics, and subsea mining instrumentation.'
+      },
+      {
+        degree: 'M.Sc',
+        title: 'Marine Geology & Geophysics',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Seafloor massive sulfide (SMS) ore genesis, Cobalt-rich crust sampling, and seismic reflection.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Marine Mineral Spectroscopy Analytics Unit',
+      'Subsea Geotechnical Triaxial Shear Testing Chamber',
+      'Coastal & Marine GIS Remote Sensing Lab'
+    ],
+    keyResearchAreas: [
+      'Abyssal Hydrogel Soil Shear Strengths',
+      'Marine Geophysics & High-Resolution Bathymetry',
+      'Seafloor Mineral System Dynamics'
+    ],
+    isaPartnershipStatus: 'Academic Member',
+    description: 'CUSAT is a major academic engine for ocean sciences in Kerala. Its School of Ocean Engineering and Department of Marine Geology provide specialised research candidates for NIOT, NIO, and global marine survey contractors.',
+    isBookmarked: false
+  },
+  {
+    id: 'inst-tu-delft',
+    name: 'TU Delft - Department of Offshore & Dredging Engineering',
+    shortName: 'TU Delft (Netherlands)',
+    country: 'Netherlands',
+    region: 'Europe',
+    cityState: 'Delft, South Holland',
+    fullAddress: 'Mekelweg 2, 2628 CD Delft, Netherlands',
+    postalCode: '2628 CD',
+    coordinates: { lat: 52.0026, lng: 4.3702 },
+    website: 'https://www.tudelft.nl/en/3mbe/education/master-programmes/offshore-and-dredging-engineering',
+    contactEmail: 'info-3mbe@tudelft.nl',
+    contactPhone: '+31 15 27 89111',
+    establishedYear: 1842,
+    accreditation: 'QS World University Ranking #3 for Engineering & Technology in Europe',
+    rankingOrReputation: 'Global #1 Authority in Deep-Sea Dredging & Offshore Mining Mechanics',
+    programsOffered: [
+      {
+        degree: 'M.Sc',
+        title: 'Offshore & Dredging Engineering (Deep-Sea Mining Specialization)',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Curriculum focused on nodule pick-up mechanics, hydraulic slurry transport, and subsea vehicle terramechanics.'
+      },
+      {
+        degree: 'Ph.D.',
+        title: 'Deep Ocean Excavation Hydraulics & Plume Dynamics',
+        duration: '4 Years',
+        mode: 'Research Fellowship',
+        description: 'Advanced research funded by European ocean mining consortia and ISA research grants.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Deep Sea Mining Pick-Up Flume & Soil Basin',
+      'Slurry Transport Pipeline Recirculating Ring',
+      'Subsea Rock & Nodule Excavation Cutter Head Test Rig'
+    ],
+    keyResearchAreas: [
+      'Nodule Pick-Up Head Hydrodynamics',
+      'Two-Phase Vertical Slurry Riser Flow',
+      'Bekker Terramechanics on Pelagic Hydrogel Clay'
+    ],
+    isaPartnershipStatus: 'ISA Training Co-Sponsor',
+    description: 'TU Delft is internationally renowned as the premier university for deep-sea mining technology and offshore dredging. Its researchers developed core excavation equations used worldwide for subsea nodule collectors and trenchers.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-ntnu-norway',
+    name: 'NTNU Norwegian University of Science & Technology - Dept of Marine Technology',
+    shortName: 'NTNU Trondheim',
+    country: 'Norway',
+    region: 'Europe',
+    cityState: 'Trondheim, Trøndelag',
+    fullAddress: 'Otto Nielsens veg 10, 7052 Trondheim, Norway',
+    postalCode: '7052',
+    coordinates: { lat: 63.4184, lng: 10.4019 },
+    website: 'https://www.ntnu.edu/imt',
+    contactEmail: 'studier@imt.ntnu.no',
+    contactPhone: '+47 73 59 55 00',
+    establishedYear: 1910,
+    accreditation: 'Nordic Center of Excellence in Marine Systems',
+    rankingOrReputation: 'Europe Premier Subsea Engineering & Deepwater Technology Center',
+    programsOffered: [
+      {
+        degree: 'M.Sc',
+        title: 'Marine Technology - Subsea Systems & Seafloor Minerals',
+        duration: '2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Subsea production systems, seafloor mining vehicle control, and Norwegian EEZ seabed mineral exploration.'
+      },
+      {
+        degree: 'Ph.D.',
+        title: 'Seafloor Massive Sulfide (SMS) Ore Harvesting Robotics',
+        duration: '3 - 4 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Focusing on mid-Atlantic ridge hydrothermal vent rock cutting and riser system stability.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Marintek Ocean Basin & Towing Tank',
+      'Subsea Autonomous Vehicle Testing Flume',
+      'Extreme Pressure Hydraulic Test Bay'
+    ],
+    keyResearchAreas: [
+      'Seafloor Massive Sulfides (SMS) Rock Cutting',
+      'Subsea Electric Drive Crawler Locomotion',
+      'Subsea Umbilical & Power Distribution Systems'
+    ],
+    isaPartnershipStatus: 'Research Collaborator',
+    description: 'NTNU in Trondheim leads European research on seafloor mineral extraction in the Norwegian Extended Continental Shelf. Its marine technology center collaborates closely with Equinor, Loke Marine Minerals, and SINTEF.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-tokyo-uni',
+    name: 'University of Tokyo - Department of Ocean Technology, Policy & Environment',
+    shortName: 'UTokyo Ocean Technology',
+    country: 'Japan',
+    region: 'Asia-Pacific',
+    cityState: 'Kashiwa, Chiba',
+    fullAddress: '5-1-5 Kashiwanoha, Kashiwa-shi, Chiba 277-8561, Japan',
+    postalCode: '277-8561',
+    coordinates: { lat: 35.8928, lng: 139.9535 },
+    website: 'https://www.otpe.k.u-tokyo.ac.jp/en',
+    contactEmail: 'info@otpe.k.u-tokyo.ac.jp',
+    contactPhone: '+81 4 7136 4700',
+    establishedYear: 1877,
+    accreditation: 'Top National University in Japan & Asia-Pacific',
+    rankingOrReputation: 'Global Pioneer in Rare Earth Element (REE) Mud Mining Technology',
+    programsOffered: [
+      {
+        degree: 'M.Sc / Ph.D.',
+        title: 'Ocean Mineral Resources & Subsea Mechanical Systems',
+        duration: '2 - 5 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Advanced studies on Minami-Torishima REE mud extraction, acoustic positioning, and deep-sea riser dynamics.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'JAMSTEC Deep Sea Simulation Pressure Test Chamber',
+      'REE Subsea Mud Airlift & Hydrocyclone Test Facility',
+      'Underwater Autonomous Crawler Navigation Lab'
+    ],
+    keyResearchAreas: [
+      'Abyssal REE Mud Continuous Lift Systems',
+      'Cobalt-Rich Manganese Crust Harvesting Cutters',
+      'Deep Sea Benthic Ecosystem Protection Protocols'
+    ],
+    isaPartnershipStatus: 'National EEZ Contractor',
+    description: 'University of Tokyo spearheads Japan deep-sea mineral resource technology for extracting high-grade Rare Earth Element (REE) mud at 5,700m depth near Minami-Torishima Island, working alongside JGMEC and JAMSTEC.',
+    isBookmarked: false
+  },
+  {
+    id: 'inst-colorado-mines',
+    name: 'Colorado School of Mines - Center for Marine Resources & Subsea Mining',
+    shortName: 'Colorado Mines (USA)',
+    country: 'USA',
+    region: 'North America',
+    cityState: 'Golden, Colorado',
+    fullAddress: '1500 Illinois St, Golden, CO 80401, United States',
+    postalCode: '80401',
+    coordinates: { lat: 39.7510, lng: -105.2226 },
+    website: 'https://www.mines.edu',
+    contactEmail: 'admissions@mines.edu',
+    contactPhone: '+1 303 273 3000',
+    establishedYear: 1874,
+    accreditation: 'ABET Accredited & Top Mining Engineering University in the Americas',
+    rankingOrReputation: 'World #1 QS Ranking for Mining & Minerals Engineering',
+    programsOffered: [
+      {
+        degree: 'M.S. / Ph.D.',
+        title: 'Marine Mining Systems & Deep Sea Excavation Engineering',
+        duration: '2 - 4 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Integrating classical terrestrial rock cutting mechanics with hyperbaric ocean environments and marine geotechnics.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Subsea Rock Cutting & Disc Cutter Test Rig',
+      'Hyperbaric Soil Friction & Shear Simulator',
+      'Mineral Processing & Metallurgical Extraction Lab'
+    ],
+    keyResearchAreas: [
+      'Hyperbaric Rock Fragmentation Dynamics',
+      'Seafloor Vehicle Terramechanics & Traction',
+      'Marine Mineral Processing & Smelting Economics'
+    ],
+    isaPartnershipStatus: 'Academic Member',
+    description: 'Colorado School of Mines applies over 150 years of top-tier mining engineering expertise to deep-sea mineral extraction, studying rock cutting mechanics under 400 bar hydrostatic seawater pressure.',
+    isBookmarked: false
+  },
+  {
+    id: 'inst-geomar-germany',
+    name: 'GEOMAR Helmholtz Centre for Ocean Research Kiel / Kiel University',
+    shortName: 'GEOMAR Kiel',
+    country: 'Germany',
+    region: 'Europe',
+    cityState: 'Kiel, Schleswig-Holstein',
+    fullAddress: 'Wischhofstraße 1-3, 24148 Kiel, Germany',
+    postalCode: '24148',
+    coordinates: { lat: 54.3283, lng: 10.1802 },
+    website: 'https://www.geomar.de/en',
+    contactEmail: 'info@geomar.de',
+    contactPhone: '+49 431 600 0',
+    establishedYear: 2004,
+    accreditation: 'Member of the Helmholtz Association of German Research Centres',
+    rankingOrReputation: 'Europe Lead Authority in Deep-Sea Plume Physics & Environmental Assessment',
+    programsOffered: [
+      {
+        degree: 'M.Sc / Ph.D.',
+        title: 'Deep Sea Biological Oceanography & Mineral Plume Physics',
+        duration: '2 - 4 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Specializing in acoustic backscatter sensor networks, plume dispersion modeling, and benthic ecosystem recovery.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'ROV KIEL 6000 Deep Sea Vehicle Base',
+      'Acoustic Particle Settling Test Tower',
+      'Seafloor Benthic Chamber Respiration Lab'
+    ],
+    keyResearchAreas: [
+      'Turbidity Plume Hydrodynamics in CCZ Contract Areas',
+      'Preservation Reference Zone (PRZ) Boundary Buffers',
+      'Deep Sea Microfauna Colonization Rates'
+    ],
+    isaPartnershipStatus: 'ISA Training Co-Sponsor',
+    description: 'GEOMAR Kiel provides indispensable scientific research on environmental impact modeling for deep-sea nodule collection in the Clarion-Clipperton Zone (CCZ), co-sponsoring ISA environmental monitoring fellowships.',
+    isBookmarked: true
+  },
+  {
+    id: 'inst-nus-singapore',
+    name: 'National University of Singapore (NUS) - Centre for Offshore Research & Engineering',
+    shortName: 'NUS Singapore (CORE)',
+    country: 'Singapore',
+    region: 'Asia-Pacific',
+    cityState: 'Singapore',
+    fullAddress: '21 Lower Kent Ridge Rd, Singapore 119077',
+    postalCode: '119077',
+    coordinates: { lat: 1.2966, lng: 103.7764 },
+    website: 'https://www.eng.nus.edu.sg',
+    contactEmail: 'engcore@nus.edu.sg',
+    contactPhone: '+65 6516 6666',
+    establishedYear: 1905,
+    accreditation: 'QS World University Ranking #8 Globally',
+    rankingOrReputation: 'Asia Premier Hub for Offshore Structures & Subsea Hydraulics',
+    programsOffered: [
+      {
+        degree: 'M.Sc',
+        title: 'Offshore Technology & Subsea Pipeline Mechanics',
+        duration: '1 - 2 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Advanced dynamics of deepwater risers, subsea manifold hydraulics, and offshore mooring.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Deepwater Ocean Basin & Wave Flume Facility',
+      'Subsea Flow Assurance & Hydrodynamic Lab'
+    ],
+    keyResearchAreas: [
+      'Deepwater Riser Vortex-Induced Vibrations (VIV)',
+      'Subsea Manifold Pressure Surges',
+      'Dynamic Mooring of Offshore Production Ships'
+    ],
+    isaPartnershipStatus: 'Research Collaborator',
+    description: 'NUS CORE combines top-ranked engineering faculties with Singapore maritime industry leaders, researching deepwater riser mechanics, fluid-structure interaction, and flow assurance.',
+    isBookmarked: false
+  },
+  {
+    id: 'inst-texas-am',
+    name: 'Texas A&M University - Department of Ocean Engineering',
+    shortName: 'Texas A&M (USA)',
+    country: 'USA',
+    region: 'North America',
+    cityState: 'College Station, Texas',
+    fullAddress: '727 Houston St, College Station, TX 77843, United States',
+    postalCode: '77843',
+    coordinates: { lat: 30.6187, lng: -96.3365 },
+    website: 'https://engineering.tamu.edu/ocean',
+    contactEmail: 'ocean-head@tamu.edu',
+    contactPhone: '+1 979 845 4515',
+    establishedYear: 1876,
+    accreditation: 'ABET Accredited Ocean Engineering Program',
+    rankingOrReputation: 'Leading Ocean Engineering & Dredging Center in North America',
+    programsOffered: [
+      {
+        degree: 'B.S. / M.S. / Ph.D.',
+        title: 'Ocean Engineering & Dredging Hydraulics',
+        duration: '2 - 4 Years',
+        mode: 'Full-time On-Campus',
+        description: 'Focusing on hydraulic slurry transport, subsea trenching, and ocean wave dynamics.'
+      }
+    ],
+    specializedLabsAndFacilities: [
+      'Haynes Coastal & Ocean Engineering Towing Basin',
+      'Dredging & Slurry Transport Test Flume'
+    ],
+    keyResearchAreas: [
+      'Centrifugal Pump Slurry Wear Models',
+      'Subsea Pipe Friction & Settlement Velocity',
+      'Offshore DP Support Vessels'
+    ],
+    isaPartnershipStatus: 'Academic Member',
+    description: 'Texas A&M Department of Ocean Engineering offers premier training in subsea dredging, slurry pipeline hydraulics, and deepwater riser dynamics, partnering with Gulf of Mexico offshore industry operators.',
+    isBookmarked: false
+  }
+];
+
 

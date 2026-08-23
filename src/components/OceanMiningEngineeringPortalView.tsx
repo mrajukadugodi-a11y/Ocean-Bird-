@@ -60,7 +60,13 @@ import {
   Trash2,
   FileDown,
   Printer,
-  Star
+  Star,
+  Building2,
+  GraduationCap,
+  School,
+  Mail,
+  Phone,
+  Map
 } from 'lucide-react';
 import { hapticEngine } from '../utils/hapticUtils';
 import {
@@ -72,6 +78,8 @@ import {
   ForumThread,
   ResearchPaper,
   GamificationMilestone,
+  OceanMiningInstitute,
+  InstituteInquiry,
   INITIAL_STUDY_MODULES,
   GLOBAL_MINING_ZONES,
   TECHNICAL_RESOURCES,
@@ -79,8 +87,10 @@ import {
   ENGINEERING_STUDY_DETAILS,
   INITIAL_FORUM_THREADS,
   INITIAL_GAMIFICATION_MILESTONES,
-  INITIAL_RESEARCH_PAPERS
+  INITIAL_RESEARCH_PAPERS,
+  INITIAL_OCEAN_MINING_INSTITUTES
 } from '../data/oceanMiningData';
+import { GlobalInstitutesMap } from './GlobalInstitutesMap';
 
 export const OceanMiningEngineeringPortalView: React.FC = () => {
   // Main Portal Navigation & Mode State
@@ -101,7 +111,33 @@ export const OceanMiningEngineeringPortalView: React.FC = () => {
     | 'GAMIFICATION_BADGES'
     | 'STUDY_ANALYTICS'
     | 'RESEARCH_LIBRARY'
+    | 'INSTITUTES_DIRECTORY'
   >('CURRICULUM');
+
+  // Ocean Mining Institutes & Universities State
+  const [institutes, setInstitutes] = useState<OceanMiningInstitute[]>(INITIAL_OCEAN_MINING_INSTITUTES);
+  const [instituteViewMode, setInstituteViewMode] = useState<'map' | 'grid' | 'split'>('split');
+  const [instituteRegionFilter, setInstituteRegionFilter] = useState<string>('ALL');
+  const [instituteDegreeFilter, setInstituteDegreeFilter] = useState<string>('ALL');
+  const [instituteSearchQuery, setInstituteSearchQuery] = useState<string>('');
+  const [onlyBookmarkedInstitutes, setOnlyBookmarkedInstitutes] = useState<boolean>(false);
+  const [selectedInstitute, setSelectedInstitute] = useState<OceanMiningInstitute | null>(null);
+
+  // University Admissions & Research Inquiry State
+  const [showInquiryModal, setShowInquiryModal] = useState<boolean>(false);
+  const [inquiryInstitute, setInquiryInstitute] = useState<OceanMiningInstitute | null>(null);
+  const [inquiryForm, setInquiryForm] = useState({
+    applicantName: '',
+    email: '',
+    phone: '',
+    country: 'India',
+    qualification: 'B.Tech / B.Sc Graduate',
+    programType: 'M.Tech / M.Sc Degrees',
+    inquiryType: 'Admissions' as 'Admissions' | 'Research Collaboration' | 'ISA Fellowship' | 'Campus Visit',
+    message: ''
+  });
+  const [inquiriesList, setInquiriesList] = useState<InstituteInquiry[]>([]);
+  const [inquiryToast, setInquiryToast] = useState<string | null>(null);
 
   // Search, Modules & Resources State with Bookmarking & Annotations
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -792,6 +828,75 @@ export const OceanMiningEngineeringPortalView: React.FC = () => {
     return matchesCat && matchesSearch;
   });
 
+  const filteredInstitutes = institutes.filter((inst) => {
+    const matchesRegion = instituteRegionFilter === 'ALL' || inst.region === instituteRegionFilter;
+    const matchesDegree =
+      instituteDegreeFilter === 'ALL' ||
+      inst.programsOffered.some((p) => p.degree.toLowerCase().includes(instituteDegreeFilter.toLowerCase()));
+    const matchesSearch =
+      inst.name.toLowerCase().includes(instituteSearchQuery.toLowerCase()) ||
+      inst.shortName.toLowerCase().includes(instituteSearchQuery.toLowerCase()) ||
+      inst.cityState.toLowerCase().includes(instituteSearchQuery.toLowerCase()) ||
+      inst.country.toLowerCase().includes(instituteSearchQuery.toLowerCase()) ||
+      inst.fullAddress.toLowerCase().includes(instituteSearchQuery.toLowerCase()) ||
+      inst.specializedLabsAndFacilities.some((lab) => lab.toLowerCase().includes(instituteSearchQuery.toLowerCase())) ||
+      inst.keyResearchAreas.some((res) => res.toLowerCase().includes(instituteSearchQuery.toLowerCase()));
+    const matchesBookmark = !onlyBookmarkedInstitutes || inst.isBookmarked;
+    return matchesRegion && matchesDegree && matchesSearch && matchesBookmark;
+  });
+
+  const handleToggleBookmarkInstitute = (instId: string) => {
+    hapticEngine.trigger('click');
+    setInstitutes((prev) =>
+      prev.map((inst) => (inst.id === instId ? { ...inst, isBookmarked: !inst.isBookmarked } : inst))
+    );
+  };
+
+  const handleOpenInquiryModal = (inst: OceanMiningInstitute) => {
+    hapticEngine.trigger('click');
+    setInquiryInstitute(inst);
+    setShowInquiryModal(true);
+  };
+
+  const handleSubmitInquiry = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inquiryInstitute) return;
+    hapticEngine.trigger('success');
+
+    const newInquiry: InstituteInquiry = {
+      id: `inq-${Date.now()}`,
+      instituteId: inquiryInstitute.id,
+      instituteName: inquiryInstitute.name,
+      applicantName: inquiryForm.applicantName,
+      email: inquiryForm.email,
+      phone: inquiryForm.phone,
+      country: inquiryForm.country,
+      qualification: inquiryForm.qualification,
+      programType: inquiryForm.programType,
+      inquiryType: inquiryForm.inquiryType,
+      message: inquiryForm.message,
+      submissionDate: new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    };
+
+    setInquiriesList((prev) => [newInquiry, ...prev]);
+    setShowInquiryModal(false);
+    setInquiryToast(`Inquiry successfully submitted to ${inquiryInstitute.shortName}! Reference Code: ${newInquiry.id.toUpperCase()}`);
+    setInquiryForm({
+      applicantName: '',
+      email: '',
+      phone: '',
+      country: 'India',
+      qualification: 'B.Tech / B.Sc Graduate',
+      programType: 'M.Tech / M.Sc Degrees',
+      inquiryType: 'Admissions',
+      message: ''
+    });
+  };
+
   const formatTimer = (totalSecs: number) => {
     const mins = Math.floor(totalSecs / 60);
     const secs = totalSecs % 60;
@@ -1099,6 +1204,21 @@ export const OceanMiningEngineeringPortalView: React.FC = () => {
           >
             <Library className="w-4 h-4 text-emerald-400" />
             <span>R&D Library & AI</span>
+          </button>
+
+          <button
+            onClick={() => {
+              hapticEngine.trigger('click');
+              setActiveTab('INSTITUTES_DIRECTORY');
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'INSTITUTES_DIRECTORY'
+                ? 'bg-slate-800 text-teal-300 border border-teal-500/50 shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Building2 className="w-4 h-4 text-teal-400" />
+            <span>Institutes & Universities ({institutes.length})</span>
           </button>
 
           <button
@@ -3243,6 +3363,638 @@ export const OceanMiningEngineeringPortalView: React.FC = () => {
                     Close Document
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 16. TAB: INSTITUTES & UNIVERSITIES DIRECTORY & INQUIRY    */}
+      {/* ======================================================== */}
+      {activeTab === 'INSTITUTES_DIRECTORY' && (
+        <div className="space-y-6 animate-fadeIn">
+          {/* Toast Alert */}
+          {inquiryToast && (
+            <div className="p-4 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/40 text-xs flex items-center justify-between font-bold shadow-xl animate-fadeIn">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                <span>{inquiryToast}</span>
+              </div>
+              <button onClick={() => setInquiryToast(null)}>
+                <X className="w-4 h-4 text-slate-400 hover:text-white" />
+              </button>
+            </div>
+          )}
+
+          {/* Header Banner */}
+          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-6 shadow-2xl bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-teal-950/40 via-slate-900 to-slate-950">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center space-x-2 text-teal-400 font-bold text-xs uppercase">
+                  <School className="w-4 h-4 text-teal-400" />
+                  <span>GLOBAL ACADEMIC & RESEARCH DIRECTORY</span>
+                </div>
+                <h2 className="text-2xl font-black text-white">Ocean Mining Studies Institutes & Universities</h2>
+                <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
+                  Comprehensive directory of premier universities, research labs, and ISA co-sponsoring academic centers across India and worldwide. Explore full postal addresses, specialized hyperbaric testing facilities, wave towing tanks, and submit direct admissions or research inquiries.
+                </p>
+              </div>
+
+              {/* Quick Stat Counter Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0">
+                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Total Centers</span>
+                  <span className="text-xl font-black text-white">{institutes.length}</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-slate-950 border border-amber-500/40 text-center">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase block">India Institutes</span>
+                  <span className="text-xl font-black text-amber-300">{institutes.filter((i) => i.country === 'India').length}</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-slate-950 border border-teal-500/40 text-center">
+                  <span className="text-[10px] text-teal-400 font-bold uppercase block">Global Universities</span>
+                  <span className="text-xl font-black text-teal-300">{institutes.filter((i) => i.country !== 'India').length}</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-slate-950 border border-indigo-500/40 text-center">
+                  <span className="text-[10px] text-indigo-400 font-bold uppercase block">ISA Co-Sponsors</span>
+                  <span className="text-xl font-black text-indigo-300">{institutes.filter((i) => i.isaPartnershipStatus === 'ISA Training Co-Sponsor').length}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* View Mode Switcher & Filter Bar */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-2 border-t border-slate-800">
+              <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 lg:pb-0">
+                <span className="text-xs font-bold text-slate-400 mr-2 flex items-center space-x-1 shrink-0">
+                  <Map className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Display Mode:</span>
+                </span>
+
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    setInstituteViewMode('split');
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center space-x-1.5 shrink-0 ${
+                    instituteViewMode === 'split'
+                      ? 'bg-teal-500 text-slate-950 border-teal-400 shadow'
+                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Split Map & Cards</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    setInstituteViewMode('map');
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center space-x-1.5 shrink-0 ${
+                    instituteViewMode === 'map'
+                      ? 'bg-teal-500 text-slate-950 border-teal-400 shadow'
+                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                  }`}
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>Full Interactive Map</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    setInstituteViewMode('grid');
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center space-x-1.5 shrink-0 ${
+                    instituteViewMode === 'grid'
+                      ? 'bg-teal-500 text-slate-950 border-teal-400 shadow'
+                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                  }`}
+                >
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>Grid Cards View</span>
+                </button>
+              </div>
+
+              {/* Bookmarked Filter Pill */}
+              <div className="flex items-center space-x-2 shrink-0">
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    setOnlyBookmarkedInstitutes(!onlyBookmarkedInstitutes);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 ${
+                    onlyBookmarkedInstitutes
+                      ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md'
+                      : 'bg-slate-950 text-amber-300 border-amber-500/40 hover:bg-slate-800'
+                  }`}
+                >
+                  {onlyBookmarkedInstitutes ? <BookmarkCheck className="w-4 h-4 text-slate-950" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
+                  <span>Bookmarked Institutes ({institutes.filter((i) => i.isBookmarked).length})</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Region Filter Chips */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-xs font-bold text-slate-400 mr-2 flex items-center space-x-1">
+                <Globe className="w-3.5 h-3.5 text-teal-400" />
+                <span>Filter Region:</span>
+              </span>
+              {[
+                { label: 'ALL REGIONS', value: 'ALL' },
+                { label: '🇮🇳 INDIA ONLY (NIOT, IITs, NIO)', value: 'India' },
+                { label: '🇪🇺 EUROPE (TU Delft, NTNU, GEOMAR)', value: 'Europe' },
+                { label: '🇺🇸 NORTH AMERICA (Colorado Mines, Texas A&M)', value: 'North America' },
+                { label: '🌏 ASIA-PACIFIC (UTokyo, NUS)', value: 'Asia-Pacific' }
+              ].map((rf) => (
+                <button
+                  key={rf.value}
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    setInstituteRegionFilter(rf.value);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                    instituteRegionFilter === rf.value
+                      ? 'bg-teal-500 text-slate-950 border-teal-400 shadow'
+                      : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+                  }`}
+                >
+                  {rf.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Search & Degree Filter Bar */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <input
+                  type="text"
+                  value={instituteSearchQuery}
+                  onChange={(e) => setInstituteSearchQuery(e.target.value)}
+                  placeholder="Search by institute name, city, address, lab facility, or research topic (e.g. 'NIOT', 'Chennai', 'IIT Madras', 'Delft', 'Hyperbaric')..."
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-teal-500"
+                />
+              </div>
+
+              <div className="flex items-center space-x-3 shrink-0">
+                <select
+                  value={instituteDegreeFilter}
+                  onChange={(e) => setInstituteDegreeFilter(e.target.value)}
+                  className="bg-slate-950 border border-slate-800 text-xs text-teal-300 rounded-xl px-3 py-2.5 font-bold focus:outline-none"
+                >
+                  <option value="ALL">ALL DEGREE PROGRAMS</option>
+                  <option value="M.Tech">M.Tech / M.Sc Degrees</option>
+                  <option value="Ph.D">Ph.D. / Post-Doc Fellowships</option>
+                  <option value="B.Tech">B.Tech / B.Sc Degrees</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Global Map Component */}
+          {(instituteViewMode === 'map' || instituteViewMode === 'split') && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center space-x-2 text-teal-400 text-xs font-bold uppercase">
+                  <Globe className="w-4 h-4 text-teal-400" />
+                  <span>VISUALIZE GLOBAL INSTITUTES & UNIVERSITIES MAP</span>
+                </div>
+                <span className="text-[10px] text-slate-400">
+                  Showing {filteredInstitutes.length} locations on map
+                </span>
+              </div>
+
+              <GlobalInstitutesMap
+                institutes={institutes}
+                onToggleBookmark={handleToggleBookmarkInstitute}
+                onOpenInquiry={handleOpenInquiryModal}
+                onSelectDetails={setSelectedInstitute}
+                searchQuery={instituteSearchQuery}
+                setSearchQuery={setInstituteSearchQuery}
+                regionFilter={instituteRegionFilter}
+                setRegionFilter={setInstituteRegionFilter}
+                onlyBookmarked={onlyBookmarkedInstitutes}
+                setOnlyBookmarked={setOnlyBookmarkedInstitutes}
+              />
+            </div>
+          )}
+
+          {/* Institutes Cards Grid */}
+          {(instituteViewMode === 'grid' || instituteViewMode === 'split') && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between px-1 pt-2">
+                <div className="flex items-center space-x-2 text-teal-400 text-xs font-bold uppercase">
+                  <Building2 className="w-4 h-4 text-teal-400" />
+                  <span>INSTITUTES DIRECTORY CARDS ({filteredInstitutes.length})</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredInstitutes.map((inst) => (
+              <div
+                key={inst.id}
+                className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-teal-500/40 transition-all space-y-4 flex flex-col justify-between shadow-xl group"
+              >
+                <div className="space-y-3">
+                  {/* Card Header Badges */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className="px-2.5 py-0.5 rounded bg-teal-500/20 text-teal-300 font-extrabold text-[10px] border border-teal-500/40 uppercase">
+                        {inst.region}
+                      </span>
+                      {inst.country === 'India' && (
+                        <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold text-[10px] border border-amber-500/40">
+                          🇮🇳 INDIA
+                        </span>
+                      )}
+                      <span className="px-2 py-0.5 rounded bg-slate-950 text-slate-400 font-bold text-[10px] border border-slate-800">
+                        Estd. {inst.establishedYear}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => handleToggleBookmarkInstitute(inst.id)}
+                      className={`p-1.5 rounded-lg border transition-all ${
+                        inst.isBookmarked
+                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                          : 'bg-slate-950 text-slate-500 border-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {inst.isBookmarked ? <BookmarkCheck className="w-4 h-4 text-amber-400" /> : <Bookmark className="w-4 h-4" />}
+                    </button>
+                  </div>
+
+                  {/* Institute Name */}
+                  <div>
+                    <h3 className="text-base font-black text-white group-hover:text-teal-300 transition-colors leading-snug">
+                      {inst.name}
+                    </h3>
+                    <p className="text-[11px] text-teal-400 font-bold mt-0.5">{inst.rankingOrReputation}</p>
+                  </div>
+
+                  {/* Postal Address Block */}
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
+                    <div className="flex items-center space-x-1.5 text-xs text-amber-300 font-bold">
+                      <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>{inst.cityState}, {inst.country}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed font-sans">{inst.fullAddress}</p>
+                    <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-900">
+                      <span>Postal Code: {inst.postalCode}</span>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(inst.fullAddress)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-teal-400 hover:underline flex items-center space-x-1 font-bold"
+                      >
+                        <Map className="w-3 h-3 text-teal-400" />
+                        <span>Google Maps</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* ISA & Accreditation Status */}
+                  <div className="text-[11px] text-slate-400 space-y-1">
+                    <p className="text-slate-300 font-sans leading-tight"><strong className="text-slate-400">Accreditation:</strong> {inst.accreditation}</p>
+                    <div className="flex items-center space-x-1.5 text-indigo-300 font-bold pt-0.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                      <span>{inst.isaPartnershipStatus}</span>
+                    </div>
+                  </div>
+
+                  {/* Specialized Labs & Facilities */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Specialized Labs & Facilities:</span>
+                    <ul className="space-y-1 text-[11px] text-slate-300 font-sans">
+                      {inst.specializedLabsAndFacilities.slice(0, 3).map((lab, lIdx) => (
+                        <li key={lIdx} className="flex items-start space-x-1.5">
+                          <CheckCircle2 className="w-3 h-3 text-teal-400 shrink-0 mt-0.5" />
+                          <span>{lab}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Offerd Degrees */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Degree Programs:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {inst.programsOffered.map((prog, pIdx) => (
+                        <span key={pIdx} className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] font-bold text-teal-300">
+                          {prog.degree}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Action Buttons */}
+                <div className="pt-3 border-t border-slate-800/90 flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => {
+                      hapticEngine.trigger('click');
+                      setSelectedInstitute(inst);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-slate-950 text-teal-300 border border-slate-800 hover:text-white font-bold text-xs flex items-center space-x-1"
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Details</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleOpenInquiryModal(inst)}
+                    className="px-3 py-1.5 rounded-xl bg-teal-500 text-slate-950 hover:bg-teal-400 font-black text-xs flex items-center space-x-1.5 shadow"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-slate-950" />
+                    <span>Inquire Now</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+          {/* Sent Inquiries Log Section */}
+          {inquiriesList.length > 0 && (
+            <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 shadow-2xl">
+              <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-teal-400 font-bold text-xs uppercase">
+                  <Mail className="w-4 h-4 text-teal-400" />
+                  <span>YOUR ACTIVE UNIVERSITY INQUIRIES & APPLICATIONS ({inquiriesList.length})</span>
+                </div>
+                <span className="text-[10px] text-slate-400">Tracked Admissions Ref Codes</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {inquiriesList.map((inq) => (
+                  <div key={inq.id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-sans">
+                    <div className="flex items-center justify-between border-b border-slate-900 pb-2">
+                      <span className="font-extrabold text-teal-300">{inq.instituteName}</span>
+                      <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold border border-emerald-500/40">
+                        SUBMITTED
+                      </span>
+                    </div>
+
+                    <div className="text-[11px] text-slate-400 space-y-0.5 font-mono">
+                      <p><strong>Applicant:</strong> {inq.applicantName} ({inq.country})</p>
+                      <p><strong>Ref Code:</strong> {inq.id.toUpperCase()}</p>
+                      <p><strong>Inquiry Type:</strong> {inq.inquiryType} - {inq.programType}</p>
+                      <p><strong>Submitted Date:</strong> {inq.submissionDate}</p>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 italic bg-slate-900 p-2 rounded-lg border border-slate-800">
+                      "{inq.message}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Detailed Institute View Modal */}
+          {selectedInstitute && (
+            <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+              <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-3xl w-full max-h-[85vh] overflow-y-auto space-y-5 shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                  <div>
+                    <div className="flex items-center space-x-2 text-teal-400 font-bold text-xs uppercase">
+                      <GraduationCap className="w-4 h-4 text-teal-400" />
+                      <span>{selectedInstitute.region} • {selectedInstitute.country}</span>
+                    </div>
+                    <h3 className="text-xl font-black text-white mt-0.5">{selectedInstitute.name}</h3>
+                  </div>
+                  <button onClick={() => setSelectedInstitute(null)}>
+                    <X className="w-5 h-5 text-slate-400 hover:text-white" />
+                  </button>
+                </div>
+
+                {/* Postal Address & Contact Info Box */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 font-sans text-xs">
+                  <h4 className="font-extrabold text-teal-300 uppercase tracking-wider text-[11px] flex items-center space-x-1.5">
+                    <MapPin className="w-4 h-4 text-amber-400" />
+                    <span>Official Campus Address & Contact Office</span>
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-slate-300">
+                    <div>
+                      <p className="font-bold text-white">{selectedInstitute.cityState}, {selectedInstitute.country}</p>
+                      <p className="text-slate-400 mt-1 leading-relaxed">{selectedInstitute.fullAddress}</p>
+                      <p className="text-slate-500 text-[10px] mt-1 font-mono">Postal Code: {selectedInstitute.postalCode}</p>
+                    </div>
+
+                    <div className="space-y-1.5 font-mono text-[11px] border-t md:border-t-0 md:border-l border-slate-800 pt-2 md:pt-0 md:pl-3">
+                      <p className="flex items-center space-x-1.5">
+                        <Mail className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                        <span className="text-teal-300">{selectedInstitute.contactEmail}</span>
+                      </p>
+                      <p className="flex items-center space-x-1.5">
+                        <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>{selectedInstitute.contactPhone}</span>
+                      </p>
+                      <p className="flex items-center space-x-1.5">
+                        <Globe className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                        <a href={selectedInstitute.website} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline flex items-center space-x-1">
+                          <span>{selectedInstitute.website}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Institute Overview */}
+                <div className="space-y-2 font-sans">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Institute Background & Legacy:</h4>
+                  <p className="text-xs text-slate-200 leading-relaxed bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    {selectedInstitute.description}
+                  </p>
+                </div>
+
+                {/* Degree Programs Offered */}
+                <div className="space-y-3 font-sans">
+                  <h4 className="text-xs font-bold text-teal-400 uppercase tracking-wider">Academic Degree Programs & Fellowships:</h4>
+                  <div className="space-y-2">
+                    {selectedInstitute.programsOffered.map((prog, pIdx) => (
+                      <div key={pIdx} className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-1 text-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-extrabold text-[10px] border border-teal-500/40">
+                              {prog.degree}
+                            </span>
+                            <span className="font-extrabold text-white">{prog.title}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-400 font-mono">{prog.duration} • {prog.mode}</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-1">{prog.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Specialized Facilities */}
+                <div className="space-y-2 font-sans">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Specialized Ocean Engineering Facilities:</h4>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-300">
+                    {selectedInstitute.specializedLabsAndFacilities.map((lab, lIdx) => (
+                      <li key={lIdx} className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center space-x-2">
+                        <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                        <span>{lab}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Footer Modal Actions */}
+                <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+                  <button
+                    onClick={() => setSelectedInstitute(null)}
+                    className="px-4 py-2 rounded-xl bg-slate-950 text-slate-300 border border-slate-800 font-bold text-xs"
+                  >
+                    Close Window
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedInstitute(null);
+                      handleOpenInquiryModal(selectedInstitute);
+                    }}
+                    className="px-5 py-2 rounded-xl bg-teal-500 text-slate-950 font-black text-xs hover:bg-teal-400 flex items-center space-x-1.5 shadow"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>Inquire for Admissions</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Admissions / Research Service Inquiry Modal */}
+          {showInquiryModal && inquiryInstitute && (
+            <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+              <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 max-w-xl w-full space-y-5 shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div>
+                    <span className="text-xs text-teal-400 font-bold uppercase">Admissions & Research Service Request</span>
+                    <h3 className="text-lg font-black text-white mt-0.5">{inquiryInstitute.shortName}</h3>
+                  </div>
+                  <button onClick={() => setShowInquiryModal(false)}>
+                    <X className="w-5 h-5 text-slate-400 hover:text-white" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleSubmitInquiry} className="space-y-4 text-xs font-sans">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Applicant Full Name:</label>
+                      <input
+                        required
+                        type="text"
+                        value={inquiryForm.applicantName}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, applicantName: e.target.value })}
+                        placeholder="e.g. Rahul Sharma / Dr. Sarah Jenkins"
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-teal-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Email Address:</label>
+                      <input
+                        required
+                        type="email"
+                        value={inquiryForm.email}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, email: e.target.value })}
+                        placeholder="e.g. applicant@domain.com"
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-teal-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Phone / WhatsApp Number:</label>
+                      <input
+                        required
+                        type="tel"
+                        value={inquiryForm.phone}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, phone: e.target.value })}
+                        placeholder="+91 98765 43210"
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-teal-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Country of Residence:</label>
+                      <input
+                        required
+                        type="text"
+                        value={inquiryForm.country}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, country: e.target.value })}
+                        placeholder="India / Netherlands / USA"
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-teal-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Current Qualification:</label>
+                      <select
+                        value={inquiryForm.qualification}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, qualification: e.target.value })}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-teal-300 font-bold focus:outline-none"
+                      >
+                        <option value="B.Tech / B.E Graduate">B.Tech / B.E Engineering Graduate</option>
+                        <option value="M.Tech / M.Sc Graduate">M.Tech / M.Sc Master Degree</option>
+                        <option value="Ph.D. Scholar">Ph.D. Research Scholar</option>
+                        <option value="Industry Professional">Industry / Offshore Engineer</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-slate-400 font-bold block">Service Inquiry Type:</label>
+                      <select
+                        value={inquiryForm.inquiryType}
+                        onChange={(e) => setInquiryForm({ ...inquiryForm, inquiryType: e.target.value as any })}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-teal-300 font-bold focus:outline-none"
+                      >
+                        <option value="Admissions">Degree Program Admissions</option>
+                        <option value="Research Collaboration">Research & Lab Collaboration</option>
+                        <option value="ISA Fellowship">ISA Training Fellowship</option>
+                        <option value="Campus Visit">Campus & Hyperbaric Lab Visit</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-slate-400 font-bold block">Inquiry Details & Academic Interest:</label>
+                    <textarea
+                      required
+                      value={inquiryForm.message}
+                      onChange={(e) => setInquiryForm({ ...inquiryForm, message: e.target.value })}
+                      placeholder="Specify your technical specialization, target academic intake, or research project interest (e.g., 'Inquiring for M.Tech in Ocean Engineering with research focus on 6,000m subsea nodule crawler robotics')..."
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:outline-none focus:border-teal-500 h-28"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end space-x-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowInquiryModal(false)}
+                      className="px-4 py-2 rounded-xl bg-slate-950 text-slate-400 border border-slate-800 font-bold"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-6 py-2 rounded-xl bg-teal-500 text-slate-950 font-black hover:bg-teal-400 shadow flex items-center space-x-1.5"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Submit Official Inquiry</span>
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           )}
