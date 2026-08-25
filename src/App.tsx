@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navbar, NavTabType } from './components/Navbar';
+import { DebugConsole } from './components/DebugConsole';
+import { OtherDomainLinksModal } from './components/OtherDomainLinksModal';
 import { HomePageView } from './components/HomePageView';
 import { CloudStructuredDashboardView } from './components/CloudStructuredDashboardView';
 import { ClimateWatchView } from './components/ClimateWatchView';
@@ -131,12 +133,17 @@ import { OfflineSyncAlertView } from './components/OfflineSyncAlertView';
 import { VesselsHealthPulseView } from './components/VesselsHealthPulseView';
 import { SmartSearchModal } from './components/SmartSearchModal';
 import { HapticPulseController } from './components/HapticPulseController';
+import { ChromeBrowserDiagnosticModal } from './components/ChromeBrowserDiagnosticModal';
 import { Footer } from './components/Footer';
 import { VesselEfficiencyChartPortal } from './components/VesselEfficiencyChartPortal';
 import { SuperMasterDarkWebAndCyberShieldAgent } from './components/SuperMasterDarkWebAndCyberShieldAgent';
 import { OceanPlasticRadarPortal } from './components/OceanPlasticRadarPortal';
 import { OceanEnvironmentLibraryPortal } from './components/OceanEnvironmentLibraryPortal';
 import { OceanMiningEngineeringPortalView } from './components/OceanMiningEngineeringPortalView';
+import { GlobalPwaDocsView } from './components/GlobalPwaDocsView';
+import { SearchIndexingPortalView } from './components/SearchIndexingPortalView';
+import { AppStatusPortalView } from './components/AppStatusPortalView';
+import { DeepLinkingSetupView } from './components/DeepLinkingSetupView';
 import { ToastContainer, ToastItem } from './components/ToastContainer';
 import { REGIONAL_CLIMATE_ALERTS } from './data/southAsiaData';
 import { ClimateAlert } from './types';
@@ -194,6 +201,8 @@ export default function App() {
   const [isBiometricModalOpen, setIsBiometricModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const [isHapticModalOpen, setIsHapticModalOpen] = useState<boolean>(false);
+  const [isChromeModalOpen, setIsChromeModalOpen] = useState<boolean>(false);
+  const [isDomainModalOpen, setIsDomainModalOpen] = useState<boolean>(false);
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'android'>('desktop');
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
 
@@ -336,6 +345,8 @@ export default function App() {
         onOpenBiometricLogin={() => setIsBiometricModalOpen(true)}
         onOpenSearch={() => setIsSearchModalOpen(true)}
         onOpenHapticSettings={() => setIsHapticModalOpen(true)}
+        onOpenChromeHelp={() => setIsChromeModalOpen(true)}
+        onOpenDomainLinks={() => setIsDomainModalOpen(true)}
       />
 
       {/* Global Desktop vs Android Mobile View Mode Switcher */}
@@ -491,6 +502,14 @@ export default function App() {
         {activeTab === 'location-nav-radio' && <LocationTrackerDigitalNavRadioView />}
         {activeTab === 'marine-weather-api' && <MarineWeatherApiView />}
         {activeTab === 'pwa-support' && <OfflinePwaSupportView />}
+        {activeTab === 'global-pwa-docs' && <GlobalPwaDocsView />}
+        {activeTab === 'search-indexing-portal' && <SearchIndexingPortalView />}
+        {activeTab === 'app-status-portal' && <AppStatusPortalView />}
+        {activeTab === 'deep-linking-setup' && (
+          <DeepLinkingSetupView
+            onNavigateToTab={(tabId) => setActiveTab(tabId)}
+          />
+        )}
         {activeTab === 'marine-ar-view' && <MarineArView />}
         {activeTab === 'marine-health' && <MarineHealthMapView />}
         {activeTab === 'crew-welfare' && <CrewWelfarePortalView />}
@@ -541,7 +560,12 @@ export default function App() {
         </button>
       )}
 
-      <Footer />
+      <Footer onOpenDomainLinks={() => setIsDomainModalOpen(true)} />
+
+      <OtherDomainLinksModal
+        isOpen={isDomainModalOpen}
+        onClose={() => setIsDomainModalOpen(false)}
+      />
 
       <BiometricLoginModal
         isOpen={isBiometricModalOpen}
@@ -559,6 +583,11 @@ export default function App() {
         onClose={() => setIsHapticModalOpen(false)}
       />
 
+      <ChromeBrowserDiagnosticModal
+        isOpen={isChromeModalOpen}
+        onClose={() => setIsChromeModalOpen(false)}
+      />
+
       {/* Global Real-Time Automated Disaster Toast Notification */}
       <RealtimeDisasterToast
         onOpenCommandCenter={() => {
@@ -566,6 +595,9 @@ export default function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
+
+      {/* Developer Debug Console Floating Tool */}
+      <DebugConsole />
     </div>
   );
 }

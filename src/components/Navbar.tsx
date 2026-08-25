@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import oceanBirdLogo from '../assets/images/ocean_bird_logo_1785499834795.jpg';
-import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe } from 'lucide-react';
+import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon } from 'lucide-react';
 import { LanguageSelector } from '../utils/languageUtils';
 import { AutoTranslationBar } from './AutoTranslationBar';
 import { hapticEngine } from '../utils/hapticUtils';
+import { PublicAuthLogoPortal, PublicUserAccount } from './PublicAuthLogoPortal';
 
 export type NavTabType =
   | 'ocean-mining-engineering'
@@ -150,7 +151,11 @@ export type NavTabType =
   | 'marine-utilities'
   | 'medical-hub'
   | 'super-master-ai-evaluator'
-  | 'stocks-shares-bonds';
+  | 'stocks-shares-bonds'
+  | 'global-pwa-docs'
+  | 'search-indexing-portal'
+  | 'app-status-portal'
+  | 'deep-linking-setup';
 
 interface NavbarProps {
   activeTab: NavTabType;
@@ -165,6 +170,8 @@ interface NavbarProps {
   onOpenBiometricLogin?: () => void;
   onOpenSearch?: () => void;
   onOpenHapticSettings?: () => void;
+  onOpenChromeHelp?: () => void;
+  onOpenDomainLinks?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -179,7 +186,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleAmbientMode,
   onOpenBiometricLogin,
   onOpenSearch,
-  onOpenHapticSettings
+  onOpenHapticSettings,
+  onOpenChromeHelp,
+  onOpenDomainLinks
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -196,6 +205,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   // Weather & Toast State
   const [showWeatherModal, setShowWeatherModal] = useState(false);
   const [toastNotice, setToastNotice] = useState<string | null>(null);
+
+  // Public Sign Up & Logo Portal State
+  const [showAuthLogoModal, setShowAuthLogoModal] = useState<false | true>(false);
+  const [authLogoDefaultTab, setAuthLogoDefaultTab] = useState<'signup' | 'signin' | 'profile' | 'logo-generator' | 'brand-press'>('signup');
+  const [loggedInUser, setLoggedInUser] = useState<PublicUserAccount | null>(null);
+
+  useEffect(() => {
+    const syncUser = () => {
+      const saved = localStorage.getItem('oceanbird_public_user_account');
+      if (saved) {
+        try {
+          setLoggedInUser(JSON.parse(saved));
+        } catch (err) {
+          setLoggedInUser(null);
+        }
+      } else {
+        setLoggedInUser(null);
+      }
+    };
+    syncUser();
+    window.addEventListener('oceanbird_auth_changed', syncUser);
+    return () => window.removeEventListener('oceanbird_auth_changed', syncUser);
+  }, []);
 
   // Live Session Timer effect
   useEffect(() => {
@@ -301,6 +333,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'super-master-ai-evaluator', label: 'Super Master AI Agent (Self Evaluation & Future Activity Engine)', icon: Brain, color: 'text-cyan-400', badge: 'SUPER MASTER AI' },
     { id: 'home', label: 'Home Page Command Hub', icon: Compass, color: 'text-cyan-400', badge: 'MAIN HUB' },
     { id: 'deployment-guide', label: 'Deploy, CI/CD, PWA & SEO Guide', icon: Rocket, color: 'text-cyan-400', badge: 'DEVOPS' },
+    { id: 'global-pwa-docs', label: 'Global PWA Technical Docs & Diagnostics', icon: Smartphone, color: 'text-cyan-400', badge: 'PWA V3' },
+    { id: 'search-indexing-portal', label: 'Search Engine Indexing & Sitemap Suite', icon: Search, color: 'text-indigo-400', badge: 'SEO / SCHEMA' },
+    { id: 'app-status-portal', label: 'Global App System Status & SLA Latency', icon: Activity, color: 'text-teal-400', badge: 'STATUS SLA' },
+    { id: 'deep-linking-setup', label: 'Universal Deep Linking & Route Setup', icon: LinkIcon, color: 'text-cyan-400', badge: 'DEEP LINK' },
     { id: 'ocean-gaming-lottery', label: 'Ocean Gaming & Entertainments Portal ($OD Money System)', icon: Trophy, color: 'text-amber-400', badge: '$OD GAMING' },
     { id: 'stocks-shares-bonds', label: 'Stocks, Shares & Bonds Sovereign Exchange (Specialties Portal)', icon: DollarSign, color: 'text-emerald-400', badge: 'STOCKS & BONDS' },
     { id: 'business-banking', label: 'Business Banking Portal (Vaults, Escrow, Lines of Credit & Payroll)', icon: Landmark, color: 'text-cyan-400', badge: 'BANKING' },
@@ -478,6 +514,66 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Right Desktop Quick Status & Theme Switcher */}
             <div className="flex items-center space-x-2">
+              {/* Public Sign Up / Sign In Account Button */}
+              <button
+                onClick={() => {
+                  hapticEngine.trigger('click');
+                  setAuthLogoDefaultTab(loggedInUser ? 'profile' : 'signup');
+                  setShowAuthLogoModal(true);
+                }}
+                className="px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 hover:from-cyan-400 hover:to-indigo-400 text-slate-950 font-black text-xs flex items-center space-x-1.5 transition-all shadow-lg shadow-cyan-500/20"
+                title="Public Account Sign Up, Sign In & Passport Manager"
+              >
+                <UserPlus className="w-3.5 h-3.5 text-slate-950" />
+                <span className="hidden sm:inline">
+                  {loggedInUser ? loggedInUser.fullName.split(' ')[0] : 'PUBLIC SIGN UP'}
+                </span>
+              </button>
+
+              {/* Public Logo & Branding Button */}
+              <button
+                onClick={() => {
+                  hapticEngine.trigger('click');
+                  setAuthLogoDefaultTab('logo-generator');
+                  setShowAuthLogoModal(true);
+                }}
+                className="px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md"
+                title="Public Logo Vector Assets & White-Label Branding Suite"
+              >
+                <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden md:inline">PUBLIC LOGO</span>
+              </button>
+
+              {/* Other Domain Links Hub Button */}
+              {onOpenDomainLinks && (
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    onOpenDomainLinks();
+                  }}
+                  className="px-3 py-1.5 rounded-full bg-gradient-to-r from-teal-500/20 to-emerald-500/20 hover:from-teal-500/30 hover:to-emerald-500/30 text-teal-300 border border-teal-400/40 text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-teal-500/10"
+                  title="View & Open Other App Domain Links & External Web Portals"
+                >
+                  <LinkIcon className="w-3.5 h-3.5 text-teal-400" />
+                  <span className="hidden sm:inline">OTHER DOMAIN LINKS</span>
+                </button>
+              )}
+
+              {/* Google Chrome Launch & Fix Button */}
+              {onOpenChromeHelp && (
+                <button
+                  onClick={() => {
+                    hapticEngine.trigger('click');
+                    onOpenChromeHelp();
+                  }}
+                  className="px-3 py-1.5 rounded-full bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-cyan-500/10"
+                  title="Google Chrome Launch Guide, Direct URL & Diagnostic Fix"
+                >
+                  <Globe className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" />
+                  <span className="hidden sm:inline">CHROME FIX & LAUNCH</span>
+                </button>
+              )}
+
               {/* Session Timer Widget */}
               <button
                 onClick={() => {
@@ -1053,6 +1149,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
       )}
+
+      {/* Public Signup & Logo Modal Portal */}
+      <PublicAuthLogoPortal
+        isOpen={showAuthLogoModal}
+        onClose={() => setShowAuthLogoModal(false)}
+        defaultTab={authLogoDefaultTab}
+        onAccountUpdate={(user) => setLoggedInUser(user)}
+      />
     </>
   );
 };

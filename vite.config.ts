@@ -10,6 +10,10 @@ export default defineConfig(() => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
+      dedupe: ['react', 'react-dom'],
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
     },
     server: {
       port: 3000,
@@ -33,19 +37,7 @@ export default defineConfig(() => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (/\/node_modules\/(react|react-dom|scheduler)\//.test(id)) {
-                return 'vendor-core';
-              }
-              if (id.includes('lucide-react')) {
-                return 'vendor-icons';
-              }
-              if (id.includes('recharts') || id.includes('d3')) {
-                return 'vendor-charts';
-              }
-              if (id.includes('motion') || id.includes('framer-motion')) {
-                return 'vendor-animation';
-              }
-              return 'vendor-libs';
+              return 'vendor';
             }
           },
           entryFileNames: 'assets/[name]-[hash].js',

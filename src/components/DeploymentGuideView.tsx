@@ -200,6 +200,41 @@ jobs:
         </div>
       </div>
 
+      {/* GOOGLE CHROME ACCESSIBILITY BANNER */}
+      <div className="p-5 bg-gradient-to-r from-cyan-950/80 via-slate-900 to-emerald-950/80 border border-cyan-500/40 rounded-3xl space-y-3 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2 text-cyan-400 font-extrabold text-sm">
+              <Globe className="w-4 h-4 text-cyan-400 animate-spin-slow" />
+              <span>GOOGLE CHROME PAGE AVAILABILITY & DIRECT LAUNCH LINK</span>
+            </div>
+            <p className="text-slate-300 text-xs leading-relaxed">
+              Why wasn't the app opening in Chrome? Sandbox dev links (<code className="text-amber-300">ais-dev-...</code>) require an active AI Studio session. Use the public production link below for 100% Google Chrome availability:
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2 shrink-0">
+            <button
+              onClick={() => copyToClipboard('https://ais-pre-52ufmuktvzrlwu42vexorh-273406748668.asia-southeast1.run.app', 'chrome-public-link')}
+              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1.5 border border-slate-700"
+            >
+              <Copy className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{copiedSection === 'chrome-public-link' ? 'Copied!' : 'Copy Chrome Link'}</span>
+            </button>
+
+            <a
+              href="https://ais-pre-52ufmuktvzrlwu42vexorh-273406748668.asia-southeast1.run.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-emerald-500/20"
+            >
+              <span>Launch in Google Chrome</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* NAVIGATION SUB TABS */}
       <div className="flex items-center space-x-2 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar">
         <button

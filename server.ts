@@ -82,11 +82,7 @@ async function startServer() {
       resolvedDistPath: safeDistDir,
       distExists,
       bundleChunks: [
-        'vendor-core.js',
-        'vendor-icons.js',
-        'vendor-charts.js',
-        'vendor-animation.js',
-        'vendor-libs.js'
+        'vendor.js'
       ],
       systemMetrics: {
         uptimeSeconds,
@@ -135,11 +131,7 @@ async function startServer() {
         isNodeModulesExists: fs.existsSync(nodeModulesDir)
       },
       resolvedBundles: {
-        vendorCore: path.join(safeDistDir, 'assets/vendor-core-[hash].js'),
-        vendorIcons: path.join(safeDistDir, 'assets/vendor-icons-[hash].js'),
-        vendorCharts: path.join(safeDistDir, 'assets/vendor-charts-[hash].js'),
-        vendorAnimation: path.join(safeDistDir, 'assets/vendor-animation-[hash].js'),
-        vendorLibs: path.join(safeDistDir, 'assets/vendor-libs-[hash].js')
+        vendor: path.join(safeDistDir, 'assets/vendor-[hash].js')
       },
       diagnosticPassed: true
     });

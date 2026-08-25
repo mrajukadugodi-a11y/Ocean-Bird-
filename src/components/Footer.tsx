@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Compass, Globe2, Ship, ShieldCheck, AlertTriangle, Info, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Compass, Globe2, Ship, ShieldCheck, AlertTriangle, Link as LinkIcon, ChevronDown, ChevronUp } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenDomainLinks?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenDomainLinks }) => {
   const [isDisclaimerExpanded, setIsDisclaimerExpanded] = useState<boolean>(false);
 
   return (
@@ -88,7 +92,19 @@ export const Footer: React.FC = () => {
               WEB ID: 28cb5e93-ce73-40cf-a6b7-5cf2d591ab7f
             </span>
           </div>
-          <p>India • Pakistan • Bangladesh • Sri Lanka • Nepal • Bhutan • Maldives • Afghanistan</p>
+
+          <div className="flex items-center space-x-4">
+            {onOpenDomainLinks && (
+              <button
+                onClick={onOpenDomainLinks}
+                className="px-2.5 py-1 bg-slate-950 border border-teal-500/40 hover:bg-teal-950/40 text-teal-300 font-mono text-[11px] font-bold rounded-lg flex items-center space-x-1 transition-colors"
+              >
+                <LinkIcon className="w-3 h-3 text-teal-400" />
+                <span>Other Domain Links</span>
+              </button>
+            )}
+            <p>India • Pakistan • Bangladesh • Sri Lanka • Nepal • Bhutan • Maldives • Afghanistan</p>
+          </div>
         </div>
       </div>
     </footer>
