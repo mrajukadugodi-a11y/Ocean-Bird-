@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import oceanBirdLogo from '../assets/images/ocean_bird_logo_1785499834795.jpg';
-import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon } from 'lucide-react';
+import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon, Store, ShoppingBag } from 'lucide-react';
 import { LanguageSelector } from '../utils/languageUtils';
 import { AutoTranslationBar } from './AutoTranslationBar';
 import { hapticEngine } from '../utils/hapticUtils';
@@ -15,6 +15,7 @@ export type NavTabType =
   | 'app-subscription-portal'
   | 'super-master-cyber-defense-squad'
   | 'public-citizen-portal'
+  | 'port-commercial-hub'
   | 'home'
   | 'deployment-guide'
   | 'ocean-gaming-lottery'
@@ -108,6 +109,7 @@ export type NavTabType =
   | 'nations'
   | 'rescue-telecom'
   | 'converter-translator'
+  | 'marine-images-gallery'
   | 'jobs-training'
   | 'ai-analyst'
   | 'tides'
@@ -329,7 +331,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'super-master-dark-web-cyber-shield', label: 'Super Master AI Dark Web, Phishing & Virus Shield Agent', icon: ShieldAlert, color: 'text-rose-400', badge: 'SUPER MASTER SHIELD' },
     { id: 'app-subscription-portal', label: 'App Subscription & Category-Wise Licensing Portal', icon: CreditCard, color: 'text-cyan-400', badge: 'SUBSCRIPTION PORTAL' },
     { id: 'super-master-cyber-defense-squad', label: 'Super Master AI Cybersecurity Agent Squad (Malware, Phishing & Anti-Hack Shield)', icon: ShieldAlert, color: 'text-rose-400', badge: 'SUPER MASTER DEFENSE' },
-    { id: 'public-citizen-portal', label: 'General Public Citizen Participant Portal (Govt ID Proof)', icon: ShieldCheck, color: 'text-indigo-400', badge: 'CITIZEN PORTAL' },
+    { id: 'public-citizen-portal', label: 'General Public Registration Portal (Email & Mobile)', icon: ShieldCheck, color: 'text-indigo-400', badge: 'PUBLIC REGISTRATION' },
+    { id: 'port-commercial-hub', label: 'Port Commercial Hub, Duty-Free & Trade Expos', icon: Store, color: 'text-amber-400', badge: 'PUBLIC RETAIL & EXPO' },
     { id: 'super-master-ai-evaluator', label: 'Super Master AI Agent (Self Evaluation & Future Activity Engine)', icon: Brain, color: 'text-cyan-400', badge: 'SUPER MASTER AI' },
     { id: 'home', label: 'Home Page Command Hub', icon: Compass, color: 'text-cyan-400', badge: 'MAIN HUB' },
     { id: 'deployment-guide', label: 'Deploy, CI/CD, PWA & SEO Guide', icon: Rocket, color: 'text-cyan-400', badge: 'DEVOPS' },
@@ -411,6 +414,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'vessels-health-logs', label: 'Vessels Health & Subsystem Logbook', icon: Heart, color: 'text-emerald-400', badge: 'HEALTH LOG' },
     { id: 'interactive-tour-guide', label: 'Interactive Onboarding Tour Guide', icon: HelpCircle, color: 'text-amber-400', badge: 'GUIDED TOUR' },
     { id: 'user-feedback-portal', label: 'User Feedback & Feature Suggestions Portal', icon: MessageSquarePlus, color: 'text-amber-400', badge: 'FEEDBACK' },
+    { id: 'marine-images-gallery', label: 'Marine Images Gallery, AI Captioning & Optimization', icon: ImageIcon, color: 'text-cyan-300', badge: 'GALLERY / WEBP' },
     { id: 'tsunami-earthquake-warning', label: 'Global Tsunami & Earthquake Early Warning Center', icon: Waves, color: 'text-rose-400', badge: 'TSUNAMI/USGS' },
     { id: 'public-utility-integration', label: 'Airways, Shipping & Public Utility Integration Portal', icon: Share2, color: 'text-cyan-400', badge: 'API/EMBED' },
     { id: 'airways-passenger', label: 'Airways Flight Passenger Ticket Booking Portal (Combined)', icon: PlaneTakeoff, color: 'text-sky-400', badge: 'AIR PASS' },

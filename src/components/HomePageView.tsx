@@ -57,10 +57,208 @@ import {
   RefreshCw,
   SlidersHorizontal,
   AlertOctagon,
-  Bell
+  Bell,
+  Image as ImageIcon,
+  Maximize2
 } from 'lucide-react';
 import { NavTabType } from './Navbar';
 import { hapticEngine } from '../utils/hapticUtils';
+import oceanBirdSunsetImg from '../assets/images/ocean_bird_sunset_1787685515840.jpg';
+import oceanBirdPosterImg from '../assets/images/ocean_bird_poster_1787685532837.jpg';
+
+export interface OceanBirdWelcomeImage {
+  id: string;
+  title: string;
+  badge: string;
+  category: 'Climate & Maritime Watch' | 'Sky & Ocean Watch' | 'Global Dashboard' | 'Maritime Operations' | 'Emergency & Seismic' | 'Satellite Telemetry' | 'Weather & Safety' | 'Cargo & Shipping' | 'Port GIS';
+  description: string;
+  url: string;
+  tags: string[];
+  tabTarget?: NavTabType;
+}
+
+export const OCEAN_BIRD_WELCOME_IMAGES: OceanBirdWelcomeImage[] = [
+  {
+    id: 'ob-hero-sunset',
+    title: 'Ocean Bird — Sunset Flagship Cruise Liner & Coastal Lighthouse',
+    badge: 'FLAGSHIP SUNSET VOYAGE',
+    category: 'Climate & Maritime Watch',
+    description: 'Ocean Bird flagship cruise liner navigating South Asian waters at golden sunset, accompanied by aerial airways monitoring and coastal lighthouse navigation radar.',
+    url: oceanBirdSunsetImg,
+    tags: ['Flagship Liner', 'Sunset Voyage', 'Lighthouse Watch', 'Airways Telemetry', 'South Asia'],
+    tabTarget: 'marine-images-gallery'
+  },
+  {
+    id: 'ob-hero-poster',
+    title: 'Ocean Bird — South Asia & Global Climate, Airways & Maritime Watch',
+    badge: 'OFFICIAL COMMAND POSTER',
+    category: 'Sky & Ocean Watch',
+    description: 'Official Ocean Bird global climate, airways, and maritime watch flagship poster with tagline "We connect the World together" and multi-domain telemetry badges.',
+    url: oceanBirdPosterImg,
+    tags: ['Official Poster', 'Climate Watch', 'Airways Watch', 'Maritime Watch', 'We Connect The World'],
+    tabTarget: 'marine-images-gallery'
+  },
+  {
+    id: 'ob-hero-01',
+    title: 'Ocean Bird — Climate & Maritime Watch Official Hero',
+    badge: 'OFFICIAL HERO BANNER',
+    category: 'Climate & Maritime Watch',
+    description: 'Watching the Oceans. Understanding the Climate. Securing Our Maritime Future. Real-time insights, smarter decisions, and safer seas for global maritime traffic.',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Weather Monitoring', 'Ocean Conditions', 'Climate Tracking', 'Maritime Traffic', 'Maritime Safety'],
+    tabTarget: 'climate'
+  },
+  {
+    id: 'ob-hero-02',
+    title: 'Ocean Bird — Climate, Maritime & Airways Multi-Domain Watch',
+    badge: 'MULTI-DOMAIN WATCH',
+    category: 'Sky & Ocean Watch',
+    description: 'Watch the Oceans. Monitor the Skies. Protect Our Planet. Integrated satellite weather monitoring connecting ocean shipping lanes with global flight airways.',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Maritime Traffic', 'Airways Watch', 'Intelligent Alerts', 'Global Coverage', 'Safety Alerts'],
+    tabTarget: 'global-fleet-map'
+  },
+  {
+    id: 'ob-hero-03',
+    title: 'Ocean Bird — Global Command Portal Dashboard Showcase',
+    badge: 'COMMAND PORTAL UI',
+    category: 'Global Dashboard',
+    description: 'Stay Informed. Stay Ahead. Stay Connected. Unified Glassmorphism dashboard with live flight tracking, ship tracking, weather radar, and seafarer job alerts.',
+    url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Active Flights: 3,456', 'Ships in Transit: 1,284', 'Ports Online: 563', 'Alerts Today: 178'],
+    tabTarget: 'ais-tracker'
+  },
+  {
+    id: 'ob-hero-04',
+    title: 'Ocean Bird — South Asia Maritime & Cruise Liner Flagship',
+    badge: 'FLAGSHIP VESSEL',
+    category: 'Maritime Operations',
+    description: 'To gather connect to the world. Ocean Bird flagship cruise liner navigating South Asian waters with eco-hybrid propulsion and satellite telemetry.',
+    url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1600&q=80',
+    tags: ['South Asia Watch', 'Maritime Transit', 'Passenger Safety', 'Clean Seas Protocol'],
+    tabTarget: 'public-citizen-portal'
+  },
+  {
+    id: 'ob-hero-05',
+    title: 'Ocean Bird — Ocean Cruise Vessel at High Seas',
+    badge: 'PASSENGER LINER',
+    category: 'Maritime Operations',
+    description: 'Deepwater passenger liner cruising under clear blue skies with continuous environmental monitoring and real-time passenger welfare tracking.',
+    url: 'https://images.unsplash.com/photo-1548574505-5e2386903b77?auto=format&fit=crop&w=1600&q=80',
+    tags: ['High Seas Route', 'Passenger Comfort', 'SatCom Link', 'Acoustic Protection'],
+    tabTarget: 'crew-welfare'
+  },
+  {
+    id: 'ob-hero-06',
+    title: 'Ocean Bird — All-in-One Global Platform & Tsunami/Seismic Warning',
+    badge: 'EARLY WARNING RADAR',
+    category: 'Emergency & Seismic',
+    description: 'Your All-in-One Global Platform for a Safer, Smarter, Sustainable Future. Includes instant Tsunami Warning (Mag 7.8) and Earthquake Early Indicators.',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Tsunami Alert Mag 7.8', 'Earthquake Alert Mag 6.9', 'Seismic Sensor Grid', 'Global Emergency Network'],
+    tabTarget: 'tsunami-earthquake-warning'
+  },
+  {
+    id: 'ob-hero-07',
+    title: 'Ocean Bird — Dark Protocol Satellite AIS & Air Traffic Radar',
+    badge: 'DARK MODE HUD',
+    category: 'Satellite Telemetry',
+    description: 'High-density dark command bridge monitor tracking global temperature (+24.8°C), sea surface temperatures, active storms, and 12,532 ships at sea.',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Satellite Telemetry', '12,532 Vessels', '8,746 Flights', 'Ocean Health Index: 82'],
+    tabTarget: 'master-claude'
+  },
+  {
+    id: 'ob-hero-08',
+    title: 'Ocean Bird — Luxury Cruise Liner Daylight Voyage',
+    badge: 'OCEAN VOYAGE',
+    category: 'Maritime Operations',
+    description: 'Daylight ocean transit with automated vessel collision avoidance sweeps and real-time speed/heading telemetry.',
+    url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Daylight Sweep', 'AIS Telemetry', 'Passenger Deck', 'Open Waters'],
+    tabTarget: 'ais-tracker'
+  },
+  {
+    id: 'ob-hero-09',
+    title: 'Ocean Bird — Sunset Golden Hour Ocean Transit',
+    badge: 'GOLDEN HOUR',
+    category: 'Weather & Safety',
+    description: 'Ocean Bird liner sailing through warm golden sunset light with real-time solar radiation, sea surface temp logging, and weather telemetry.',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Sunset Route', 'Solar Radiation', 'Sea Surface Temp', 'Coastal Patrol'],
+    tabTarget: 'climate'
+  },
+  {
+    id: 'ob-hero-10',
+    title: 'Ocean Bird — Rough Sea & Storm Navigation Mode',
+    badge: 'STORM NAVIGATION',
+    category: 'Weather & Safety',
+    description: 'Heavy swell and storm conditions navigation with hull stress monitoring, dynamic wave height telemetry, and automated stabilizer feedback.',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Wave Height 4.2m', 'Storm Surge', 'Stabilizer System', 'Heavy Weather Protocol'],
+    tabTarget: 'emergency-sos-pulse'
+  },
+  {
+    id: 'ob-hero-11',
+    title: 'Ocean Bird — Clear Horizon Open Water Voyage',
+    badge: 'OPEN WATER',
+    category: 'Maritime Operations',
+    description: 'Clear weather ocean transit with optimal fuel efficiency and zero-emission auxiliary sea breeze power optimization.',
+    url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Zero Emission Mode', 'Horizon Tracking', 'Smooth Transit', 'Clean Seas'],
+    tabTarget: 'smart-fuel-optimizer'
+  },
+  {
+    id: 'ob-hero-12',
+    title: 'Ocean Bird — Commercial TEU Container Vessel in Deep Waters',
+    badge: 'CARGO LOGISTICS',
+    category: 'Cargo & Shipping',
+    description: 'Deepwater container vessel carrying 18,000 TEU across international shipping lanes with automated load bay stowage verification.',
+    url: 'https://images.unsplash.com/photo-1548574505-5e2386903b77?auto=format&fit=crop&w=1600&q=80',
+    tags: ['18,000 TEU', 'Smart Cargo Stacker', 'Fuel Optimizer', 'Port ETA 06:00'],
+    tabTarget: 'smart-load-planner'
+  },
+  {
+    id: 'ob-hero-13',
+    title: 'Ocean Port Commercial Hub, Duty-Free & Trade Expos',
+    badge: 'PUBLIC & RESIDENT HUB',
+    category: 'Maritime Operations',
+    description: 'Commercial business centre, duty-free emporiums, trade exhibition halls, and waterfront dining open to general public, coastal residents & visitors.',
+    url: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Duty-Free Shopping', 'Co-Working Desks', 'Trade Expo Pass', 'Sunset Dining', 'Resident Pass'],
+    tabTarget: 'port-commercial-hub'
+  },
+  {
+    id: 'ob-hero-14',
+    title: 'Ocean Bird — Harbor Pier Berth & Passenger Terminal',
+    badge: 'PORT BERTH',
+    category: 'Port GIS',
+    description: 'Liners berthing at South Asia smart port pier terminal with automated gangway pass scanning and customs verification.',
+    url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Pier 4 Berth', 'Gangway Scan', 'Customs Check', 'Visitor Pass'],
+    tabTarget: 'interactive-port-map'
+  },
+  {
+    id: 'ob-hero-14-night',
+    title: 'Ocean Bird — Night Navigation & Lunar Waterway Transit',
+    badge: 'NIGHT NAVIGATION',
+    category: 'Satellite Telemetry',
+    description: 'Night vision radar navigation under moonlight with automated thermal imaging and vessel collision avoidance sweeps.',
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Thermal HUD', 'Night Radar', 'Moonlight Track', 'Collision Warning'],
+    tabTarget: 'maritime-ar-view'
+  },
+  {
+    id: 'ob-hero-15',
+    title: 'Ocean Bird — Coastal Mountain Fjord Pass Arrival',
+    badge: 'FJORD ARRIVAL',
+    category: 'Maritime Operations',
+    description: 'Cruising through scenic coastal mountain passages with environmental acoustic protection for marine life and marine mammal radar.',
+    url: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1600&q=80',
+    tags: ['Acoustic Protection', 'Mammal Radar', 'Scenic Pass', 'Green Port'],
+    tabTarget: 'ocean-environment-library'
+  }
+];
 
 interface HomePageViewProps {
   onNavigateTab: (tab: NavTabType) => void;
@@ -82,6 +280,13 @@ export const HomePageView: React.FC<HomePageViewProps> = ({ onNavigateTab, onOpe
   const [searchQuery, setSearchQuery] = useState('');
   const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
   const [selectedClimateRegion, setSelectedClimateRegion] = useState<'BAY_OF_BENGAL' | 'ARABIAN_SEA' | 'MALACCA_STRAIT' | 'GLOBAL'>('BAY_OF_BENGAL');
+
+  // Welcome Hero Images Showcase State (15 Images)
+  const [activeHeroImageId, setActiveHeroImageId] = useState<string>('ob-hero-01');
+  const [selectedIntroImage, setSelectedIntroImage] = useState<OceanBirdWelcomeImage | null>(null);
+  const [welcomeCategoryFilter, setWelcomeCategoryFilter] = useState<string>('ALL');
+  const [welcomeViewMode, setWelcomeViewMode] = useState<'GRID' | 'CAROUSEL'>('GRID');
+  const [welcomeCarouselIndex, setWelcomeCarouselIndex] = useState<number>(0);
 
   // 1. Climate Risk Index (CRI) States
   const [simulatedWarming, setSimulatedWarming] = useState<number>(1.5); // +1.5°C to +3.0°C
@@ -587,11 +792,11 @@ Generated by Ocean Bird Autonomous Command Hub
               <div className="flex flex-wrap items-center gap-2 mt-3 text-xs">
                 <span className="text-slate-500 font-bold text-[11px] uppercase">Quick Search:</span>
                 {[
+                  { label: '📷 Upload Marine Images', tab: 'public-citizen-portal' as NavTabType },
                   { label: '⚒️ Ocean Mining Studies', tab: 'ocean-mining-engineering' as NavTabType },
-                  { label: '🚢 Vessels AIS', tab: 'ais-tracker' as NavTabType },
-                  { label: '📍 Ports GIS', tab: 'interactive-port-map' as NavTabType },
-                  { label: '🚨 Emergency SOS', tab: 'emergency-sos-pulse' as NavTabType },
-                  { label: '📦 Load Bay', tab: 'smart-load-planner' as NavTabType },
+                  { label: '🚢 Vessels AIS Proximity Radar', tab: 'ais-tracker' as NavTabType },
+                  { label: '🚨 Global Emergency Map', tab: 'emergency-sos-pulse' as NavTabType },
+                  { label: '📄 Auto PDF Exporter', tab: 'public-citizen-portal' as NavTabType },
                   { label: '🤖 AI Master', tab: 'master-claude' as NavTabType },
                   { label: '💼 Job Alerts', tab: 'global-job-alerts' as NavTabType }
                 ].map((tag, idx) => (
@@ -611,6 +816,220 @@ Generated by Ocean Bird Autonomous Command Hub
             </form>
           </div>
         </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2B. OCEAN BIRD WELCOME & PLATFORM SHOWCASE GALLERY      */}
+      {/* ======================================================== */}
+      <div className="bg-slate-900/90 rounded-3xl border border-cyan-500/30 p-6 space-y-6 shadow-2xl backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-cyan-500/20 text-cyan-300 rounded-2xl border border-cyan-500/30">
+              <ImageIcon className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-base font-black text-white font-sans">Ocean Bird Welcome &amp; Platform Introduction Gallery</h3>
+                <span className="bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-cyan-500/30">
+                  15 GRAPHICS LOADED
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">Explore official Ocean Bird platform welcome visuals, climate watch banners, and maritime command center artwork.</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setWelcomeViewMode(welcomeViewMode === 'GRID' ? 'CAROUSEL' : 'GRID')}
+              className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-cyan-300 hover:border-cyan-500/50 transition-all flex items-center space-x-1.5"
+            >
+              <Eye className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{welcomeViewMode === 'GRID' ? 'Switch to Spotlight' : 'Show All 15 Grid'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-xs">
+          {['ALL', 'Climate & Maritime Watch', 'Sky & Ocean Watch', 'Global Dashboard', 'Maritime Operations', 'Emergency & Seismic', 'Satellite Telemetry', 'Cargo & Shipping', 'Port GIS'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                hapticEngine.trigger('click');
+                setWelcomeCategoryFilter(cat);
+              }}
+              className={`px-3 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap transition-all ${
+                welcomeCategoryFilter === cat
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50'
+                  : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
+              }`}
+            >
+              {cat === 'ALL' ? '🌟 All 15 Welcome Graphics' : cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Welcome Images Content Display */}
+        {welcomeViewMode === 'GRID' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {OCEAN_BIRD_WELCOME_IMAGES
+              .filter((img) => welcomeCategoryFilter === 'ALL' || img.category === welcomeCategoryFilter)
+              .map((item) => {
+                const isActive = activeHeroImageId === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    className={`bg-slate-950 rounded-2xl border transition-all overflow-hidden group space-y-3 flex flex-col justify-between p-3 ${
+                      isActive ? 'border-cyan-400 ring-2 ring-cyan-500/40 shadow-xl' : 'border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <div className="relative h-44 rounded-xl overflow-hidden bg-slate-900">
+                      <img
+                        src={item.url}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80" />
+
+                      <div className="absolute top-2 left-2 flex flex-wrap gap-1">
+                        <span className="bg-cyan-500/90 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded shadow">
+                          {item.badge}
+                        </span>
+                        {isActive && (
+                          <span className="bg-emerald-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded shadow animate-pulse">
+                            ACTIVE HERO THEME
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          hapticEngine.trigger('click');
+                          setSelectedIntroImage(item);
+                        }}
+                        className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-950/80 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 transition-colors border border-slate-700"
+                        title="Expand Image Lightbox"
+                      >
+                        <Maximize2 className="w-3.5 h-3.5" />
+                      </button>
+
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <h4 className="text-xs font-black text-white drop-shadow truncate">{item.title}</h4>
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-slate-400 line-clamp-2 leading-normal px-1">{item.description}</p>
+
+                    <div className="flex flex-wrap gap-1 px-1">
+                      {item.tags.slice(0, 3).map((t, idx) => (
+                        <span key={idx} className="bg-slate-900 text-cyan-300 text-[9px] font-mono px-2 py-0.5 rounded border border-slate-800">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                      <button
+                        onClick={() => {
+                          hapticEngine.trigger('click');
+                          setSelectedIntroImage(item);
+                        }}
+                        className="flex-1 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-[10px] font-mono font-bold border border-slate-800 transition-colors text-center"
+                      >
+                        Inspect Full Size
+                      </button>
+
+                      {item.tabTarget && (
+                        <button
+                          onClick={() => {
+                            hapticEngine.trigger('click');
+                            onNavigateTab(item.tabTarget!);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 text-[10px] font-mono font-bold border border-cyan-500/30 transition-all flex items-center space-x-1"
+                        >
+                          <span>Open Module</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        ) : (
+          /* Spotlight Carousel View */
+          <div className="bg-slate-950 rounded-2xl border border-slate-800 p-6 space-y-4 relative overflow-hidden">
+            {(() => {
+              const currentImg = OCEAN_BIRD_WELCOME_IMAGES[welcomeCarouselIndex % OCEAN_BIRD_WELCOME_IMAGES.length];
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                  <div className="relative h-64 lg:h-80 rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl group">
+                    <img
+                      src={currentImg.url}
+                      alt={currentImg.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <span className="absolute top-3 left-3 bg-cyan-400 text-slate-950 font-black text-xs px-3 py-1 rounded-full shadow-lg">
+                      {currentImg.badge}
+                    </span>
+                    <button
+                      onClick={() => setSelectedIntroImage(currentImg)}
+                      className="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-slate-950/90 text-cyan-300 text-xs font-mono font-bold border border-cyan-500/40 flex items-center space-x-1.5 shadow-lg"
+                    >
+                      <Maximize2 className="w-4 h-4 text-cyan-400" />
+                      <span>Expand Lightbox</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest block">
+                        WELCOME GRAPHIC {welcomeCarouselIndex + 1} OF {OCEAN_BIRD_WELCOME_IMAGES.length}
+                      </span>
+                      <h3 className="text-xl font-black text-white font-sans">{currentImg.title}</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">{currentImg.description}</p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5">
+                      {currentImg.tags.map((tag, idx) => (
+                        <span key={idx} className="bg-slate-900 text-cyan-300 text-xs font-mono px-2.5 py-1 rounded-lg border border-slate-800">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center space-x-3 pt-4">
+                      <button
+                        onClick={() => {
+                          setWelcomeCarouselIndex((prev) => (prev > 0 ? prev - 1 : OCEAN_BIRD_WELCOME_IMAGES.length - 1));
+                        }}
+                        className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs border border-slate-800"
+                      >
+                        ← Previous
+                      </button>
+                      <button
+                        onClick={() => {
+                          setWelcomeCarouselIndex((prev) => (prev + 1) % OCEAN_BIRD_WELCOME_IMAGES.length);
+                        }}
+                        className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-lg"
+                      >
+                        Next Graphic →
+                      </button>
+                      {currentImg.tabTarget && (
+                        <button
+                          onClick={() => onNavigateTab(currentImg.tabTarget!)}
+                          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg"
+                        >
+                          Launch Feature Module
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
       </div>
 
       {/* ======================================================== */}
@@ -1419,6 +1838,94 @@ Generated by Ocean Bird Autonomous Command Hub
           </button>
         </div>
       </div>
+
+      {/* Lightbox Modal for Ocean Bird Welcome Graphics */}
+      {selectedIntroImage && (
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-slate-900 border border-cyan-500/40 rounded-3xl max-w-4xl w-full p-6 space-y-6 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button
+              onClick={() => setSelectedIntroImage(null)}
+              className="absolute top-4 right-4 p-2 rounded-2xl bg-slate-950 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center space-x-3">
+              <span className="bg-cyan-500/20 text-cyan-300 text-xs font-mono font-bold px-3 py-1 rounded-full border border-cyan-500/30">
+                {selectedIntroImage.badge}
+              </span>
+              <span className="text-slate-400 text-xs font-mono">{selectedIntroImage.category}</span>
+            </div>
+
+            <div className="relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 h-72 sm:h-96">
+              <img
+                src={selectedIntroImage.url}
+                alt={selectedIntroImage.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <h3 className="text-xl font-black text-white font-sans">{selectedIntroImage.title}</h3>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-sm text-slate-300 leading-relaxed">{selectedIntroImage.description}</p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {selectedIntroImage.tags.map((tag, idx) => (
+                  <span key={idx} className="bg-slate-950 text-cyan-300 text-xs font-mono px-3 py-1 rounded-xl border border-slate-800">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <button
+                onClick={() => {
+                  setActiveHeroImageId(selectedIntroImage.id);
+                  hapticEngine.trigger('success');
+                  setSelectedIntroImage(null);
+                }}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black transition-all shadow-lg flex items-center space-x-2 ${
+                  activeHeroImageId === selectedIntroImage.id
+                    ? 'bg-emerald-500 text-slate-950'
+                    : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950'
+                }`}
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>
+                  {activeHeroImageId === selectedIntroImage.id
+                    ? 'Selected Active Welcome Theme'
+                    : 'Set as Active App Welcome Hero Background'}
+                </span>
+              </button>
+
+              <div className="flex items-center space-x-2">
+                {selectedIntroImage.tabTarget && (
+                  <button
+                    onClick={() => {
+                      const tab = selectedIntroImage.tabTarget!;
+                      setSelectedIntroImage(null);
+                      onNavigateTab(tab);
+                    }}
+                    className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg flex items-center space-x-2"
+                  >
+                    <span>Launch Feature Module</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setSelectedIntroImage(null)}
+                  className="px-5 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-bold"
+                >
+                  Close Preview
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

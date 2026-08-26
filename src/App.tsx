@@ -98,6 +98,8 @@ import { AppOwnershipCertificateView } from './components/AppOwnershipCertificat
 import { CrewCertificationTrackerView } from './components/CrewCertificationTrackerView';
 import { PortDroneSupportView } from './components/PortDroneSupportView';
 import { PublicCitizenParticipantPortalView } from './components/PublicCitizenParticipantPortalView';
+import { PortCommercialShoppingExhibitionView } from './components/PortCommercialShoppingExhibitionView';
+import { MarineImagesGalleryView } from './components/MarineImagesGalleryView';
 import { AppSubscriptionPortalView } from './components/AppSubscriptionPortalView';
 import { AppDownloadAndSubscribePortal } from './components/AppDownloadAndSubscribePortal';
 import { SuperMasterCyberDefenseSquadView } from './components/SuperMasterCyberDefenseSquadView';
@@ -371,6 +373,16 @@ export default function App() {
         {activeTab === 'app-subscription-portal' && <AppDownloadAndSubscribePortal />}
         {activeTab === 'super-master-cyber-defense-squad' && <SuperMasterCyberDefenseSquadView />}
         {activeTab === 'public-citizen-portal' && <PublicCitizenParticipantPortalView />}
+        {activeTab === 'port-commercial-hub' && (
+          <PortCommercialShoppingExhibitionView
+            onNavigateTab={(tab) => setActiveTab(tab)}
+          />
+        )}
+        {activeTab === 'marine-images-gallery' && (
+          <MarineImagesGalleryView
+            onNavigateTab={(tab) => setActiveTab(tab)}
+          />
+        )}
         {activeTab === 'super-master-ai-evaluator' && <SuperMasterAiEvaluatorView />}
         {activeTab === 'home' && (
           <HomePageView

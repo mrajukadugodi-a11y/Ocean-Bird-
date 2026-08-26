@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Compass, Globe2, Ship, ShieldCheck, AlertTriangle, Link as LinkIcon, ChevronDown, ChevronUp } from 'lucide-react';
+import { Compass, Globe2, Ship, ShieldCheck, AlertTriangle, Link as LinkIcon, Smartphone, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface FooterProps {
   onOpenDomainLinks?: () => void;
@@ -7,6 +7,19 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenDomainLinks }) => {
   const [isDisclaimerExpanded, setIsDisclaimerExpanded] = useState<boolean>(false);
+
+  const handleToggleAndroidDebugMode = () => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('debug') === 'true') {
+      url.searchParams.delete('debug');
+      localStorage.removeItem('mobile_debug_active');
+    } else {
+      url.searchParams.set('debug', 'true');
+      localStorage.setItem('mobile_debug_active', 'true');
+    }
+    window.location.href = url.toString();
+  };
 
   return (
     <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-8 mt-12 font-mono">
@@ -93,7 +106,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDomainLinks }) => {
             </span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center space-x-2 sm:space-x-4 gap-y-2">
+            <button
+              onClick={handleToggleAndroidDebugMode}
+              className="px-2.5 py-1 bg-slate-950 border border-cyan-500/40 hover:bg-cyan-950/40 text-cyan-300 font-mono text-[11px] font-bold rounded-lg flex items-center space-x-1 transition-colors"
+              title="Toggle Android Mobile Debug Mode (?debug=true)"
+            >
+              <Smartphone className="w-3 h-3 text-cyan-400" />
+              <span>Android Debug</span>
+            </button>
             {onOpenDomainLinks && (
               <button
                 onClick={onOpenDomainLinks}

@@ -62,9 +62,9 @@ const SAMPLE_HOTELS: HotelStay[] = [
     nightlyPriceUSD: 240,
     amenities: ['Sea View', 'Port Shuttle', '24/7 Butler', 'Helipad', 'Free High-Speed Wi-Fi'],
     roomTypes: [
-      { id: 'R1', name: 'Deluxe Sea View Suite', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
-      { id: 'R2', name: 'Executive Captain Lounge Suite', maxGuests: 3, priceMultiplier: 1.6, bedConfig: '1 King Bed + Daybed' },
-      { id: 'R3', name: 'Heritage Grand Harbor Villa', maxGuests: 4, priceMultiplier: 2.5, bedConfig: '2 Super King Beds' }
+      { id: 'HOTEL-BOM-001-R1', name: 'Deluxe Sea View Suite', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
+      { id: 'HOTEL-BOM-001-R2', name: 'Executive Captain Lounge Suite', maxGuests: 3, priceMultiplier: 1.6, bedConfig: '1 King Bed + Daybed' },
+      { id: 'HOTEL-BOM-001-R3', name: 'Heritage Grand Harbor Villa', maxGuests: 4, priceMultiplier: 2.5, bedConfig: '2 Super King Beds' }
     ]
   },
   {
@@ -81,8 +81,8 @@ const SAMPLE_HOTELS: HotelStay[] = [
     nightlyPriceUSD: 380,
     amenities: ['Rooftop Infinity Pool', '24h VIP Shuttle', 'VIP Terminal Clearance', 'Spa'],
     roomTypes: [
-      { id: 'R1', name: 'Strait View Premier Room', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
-      { id: 'R2', name: 'Sky Harbor Suite', maxGuests: 3, priceMultiplier: 1.8, bedConfig: '1 King Bed + Lounge' }
+      { id: 'HOTEL-SIN-002-R1', name: 'Strait View Premier Room', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
+      { id: 'HOTEL-SIN-002-R2', name: 'Sky Harbor Suite', maxGuests: 3, priceMultiplier: 1.8, bedConfig: '1 King Bed + Lounge' }
     ]
   },
   {
@@ -99,8 +99,8 @@ const SAMPLE_HOTELS: HotelStay[] = [
     nightlyPriceUSD: 210,
     amenities: ['Direct Airport Shuttle', 'Late Check-out for Crew', 'Executive Lounge', 'Pool'],
     roomTypes: [
-      { id: 'R1', name: 'Executive Port View King', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
-      { id: 'R2', name: 'Maritime Royal Suite', maxGuests: 4, priceMultiplier: 2.0, bedConfig: '2 King Beds' }
+      { id: 'HOTEL-DXB-003-R1', name: 'Executive Port View King', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
+      { id: 'HOTEL-DXB-003-R2', name: 'Maritime Royal Suite', maxGuests: 4, priceMultiplier: 2.0, bedConfig: '2 King Beds' }
     ]
   },
   {
@@ -117,8 +117,8 @@ const SAMPLE_HOTELS: HotelStay[] = [
     nightlyPriceUSD: 750,
     amenities: ['Overwater Bungalow', 'Private Yacht Transfer', 'Butler Service', 'Private Plunge Pool'],
     roomTypes: [
-      { id: 'R1', name: 'Overwater Sunset Villa', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
-      { id: 'R2', name: 'Caroline Astor Ocean Estate', maxGuests: 6, priceMultiplier: 2.8, bedConfig: '3 King Bedrooms' }
+      { id: 'HOTEL-MLE-004-R1', name: 'Overwater Sunset Villa', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
+      { id: 'HOTEL-MLE-004-R2', name: 'Caroline Astor Ocean Estate', maxGuests: 6, priceMultiplier: 2.8, bedConfig: '3 King Bedrooms' }
     ]
   },
   {
@@ -135,8 +135,8 @@ const SAMPLE_HOTELS: HotelStay[] = [
     nightlyPriceUSD: 195,
     amenities: ['Table Mountain View', 'Ayuverda Spa', 'Port Transfer Shuttle', 'Wine Cellar'],
     roomTypes: [
-      { id: 'R1', name: 'Luxury Waterfront Room', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
-      { id: 'R2', name: 'Presidential Harbor Suite', maxGuests: 4, priceMultiplier: 2.2, bedConfig: '2 Bedrooms' }
+      { id: 'HOTEL-CPT-005-R1', name: 'Luxury Waterfront Room', maxGuests: 2, priceMultiplier: 1.0, bedConfig: '1 King Bed' },
+      { id: 'HOTEL-CPT-005-R2', name: 'Presidential Harbor Suite', maxGuests: 4, priceMultiplier: 2.2, bedConfig: '2 Bedrooms' }
     ]
   }
 ];

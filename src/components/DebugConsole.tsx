@@ -19,7 +19,15 @@ import {
   HardDrive,
   RefreshCw,
   Bug,
-  Filter
+  Filter,
+  Smartphone,
+  Share2,
+  Usb,
+  ExternalLink,
+  HelpCircle,
+  CheckCircle2,
+  Zap,
+  Code
 } from 'lucide-react';
 
 export interface DebugLogEntry {
@@ -43,8 +51,40 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
 }) => {
-  const [internalIsOpen, setInternalIsOpen] = useState<boolean>(false);
+  // Check if debug=true query parameter is in URL or localStorage
+  const [isDebugEnabled, setIsDebugEnabled] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    const hasParam = params.get('debug') === 'true';
+    const hasStorage = localStorage.getItem('mobile_debug_active') === 'true';
+    return hasParam || hasStorage;
+  });
+
+  const [internalIsOpen, setInternalIsOpen] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    const hasParam = params.get('debug') === 'true';
+    const hasStorage = localStorage.getItem('mobile_debug_active') === 'true';
+    return hasParam || hasStorage;
+  });
+
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+
+  // Listen for URL changes
+  useEffect(() => {
+    const checkDebugParam = () => {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const hasDebug = params.get('debug') === 'true' || localStorage.getItem('mobile_debug_active') === 'true';
+        setIsDebugEnabled(hasDebug);
+        if (hasDebug) {
+          setInternalIsOpen(true);
+        }
+      }
+    };
+    window.addEventListener('popstate', checkDebugParam);
+    return () => window.removeEventListener('popstate', checkDebugParam);
+  }, []);
 
   const handleClose = () => {
     if (externalOnClose) {
@@ -74,7 +114,9 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [isMaximized, setIsMaximized] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'console' | 'network' | 'storage' | 'system'>('console');
+  const [selectedTab, setSelectedTab] = useState<'console' | 'network' | 'storage' | 'system' | 'android'>('console');
+  const [isErudaActive, setIsErudaActive] = useState<boolean>(false);
+  const [androidShareStatus, setAndroidShareStatus] = useState<string | null>(null);
 
   // Real-time System Metrics
   const [memoryHeap, setMemoryHeap] = useState<number>(44.2);
@@ -82,16 +124,49 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
   const [storageKeys, setStorageKeys] = useState<{ key: string; sizeKb: number }[]>([]);
   const logEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Keyboard shortcut listener (Alt + D)
+  // Keyboard shortcut listener (Alt + D) - enables debug mode & toggles console
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && (e.key === 'd' || e.key === 'D')) {
         e.preventDefault();
+        setIsDebugEnabled(true);
         setInternalIsOpen((prev) => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Multi-Touch Gesture Detection on Android Devices (3 Finger Tap or Triple Tap Screen)
+  useEffect(() => {
+    let tapCount = 0;
+    let lastTapTime = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      // Secret gesture 1: 3 fingers touching screen simultaneously
+      if (e.touches && e.touches.length >= 3) {
+        setIsDebugEnabled(true);
+        setInternalIsOpen(true);
+        return;
+      }
+
+      // Secret gesture 2: 4 rapid taps within 1 second anywhere on screen
+      const now = Date.now();
+      if (now - lastTapTime < 350) {
+        tapCount++;
+        if (tapCount >= 4) {
+          setIsDebugEnabled(true);
+          setInternalIsOpen((prev) => !prev);
+          tapCount = 0;
+        }
+      } else {
+        tapCount = 1;
+      }
+      lastTapTime = now;
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    return () => window.removeEventListener('touchstart', handleTouchStart);
   }, []);
 
   // Intercept window errors & unhandled promise rejections
@@ -136,7 +211,6 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
     const origInfo = console.info;
 
     const safeAppendLog = (entry: DebugLogEntry) => {
-      // Use queueMicrotask/setTimeout to ensure setLogs is never called synchronously during a component render
       setTimeout(() => {
         setLogs((prev) => [...prev.slice(-200), entry]);
       }, 0);
@@ -154,7 +228,7 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
           details: args.length > 1 ? args : undefined,
         });
       } catch {
-        // Fallback catch to prevent console handler crash
+        // Fallback catch
       }
     };
 
@@ -216,7 +290,6 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
   // Monitor Memory & LocalStorage
   useEffect(() => {
     const interval = setInterval(() => {
-      // Memory simulation / performance API check
       if ((performance as any).memory) {
         const usedMb = ((performance as any).memory.usedJSHeapSize / (1024 * 1024)).toFixed(1);
         setMemoryHeap(Number(usedMb));
@@ -225,7 +298,6 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
       }
       setFps(Math.floor(58 + Math.random() * 3));
 
-      // Inspect localStorage
       if (typeof window !== 'undefined' && window.localStorage) {
         const keys: { key: string; sizeKb: number }[] = [];
         for (let i = 0; i < localStorage.length; i++) {
@@ -267,6 +339,46 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
     downloadAnchor.remove();
   };
 
+  const handleAndroidShareLogs = async () => {
+    const logSummary = logs.map((l) => `[${l.timestamp}] [${l.type.toUpperCase()}] ${l.message}`).join('\n');
+    const shareData = {
+      title: 'Ocean App - Android Debug Logs Report',
+      text: `Captured Debug Logs (${logs.length} entries):\n\n${logSummary.substring(0, 3000)}`,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        setAndroidShareStatus('Logs shared via Android Share Sheet!');
+      } catch {
+        setAndroidShareStatus('Share cancelled or failed.');
+      }
+    } else {
+      navigator.clipboard.writeText(shareData.text);
+      setAndroidShareStatus('Copied full log summary to clipboard!');
+    }
+    setTimeout(() => setAndroidShareStatus(null), 3000);
+  };
+
+  const handleToggleErudaMobileInspector = () => {
+    if (typeof window === 'undefined') return;
+    if ((window as any).eruda) {
+      (window as any).eruda.destroy();
+      setIsErudaActive(false);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+    script.onload = () => {
+      if ((window as any).eruda) {
+        (window as any).eruda.init();
+        setIsErudaActive(true);
+      }
+    };
+    document.body.appendChild(script);
+  };
+
   const handleCopyLog = (log: DebugLogEntry) => {
     const text = `[${log.timestamp}] [${log.type.toUpperCase()}] ${log.message}${
       log.stack ? `\nStack: ${log.stack}` : ''
@@ -295,12 +407,29 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
     setLogs((prev) => [...prev, newEntry]);
   };
 
+  const handleToggleMobileDebugUrlParam = () => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('debug') === 'true') {
+      url.searchParams.delete('debug');
+      localStorage.removeItem('mobile_debug_active');
+    } else {
+      url.searchParams.set('debug', 'true');
+      localStorage.setItem('mobile_debug_active', 'true');
+    }
+    window.location.href = url.toString();
+  };
+
   if (!isOpen) {
+    if (!isDebugEnabled) {
+      return null;
+    }
+
     return (
       <button
         onClick={() => setInternalIsOpen(true)}
-        className="fixed bottom-4 right-4 z-50 px-3 py-2 bg-slate-900 border border-slate-700 hover:border-emerald-500 text-slate-200 hover:text-white rounded-2xl shadow-2xl flex items-center space-x-2 text-xs font-mono font-bold transition-all hover:scale-105 active:scale-95 group"
-        title="Open Developer Debug Console (Alt + D)"
+        className="fixed bottom-4 right-4 z-50 px-3 py-2 bg-slate-900/90 border border-slate-700 hover:border-emerald-500 text-slate-200 hover:text-white rounded-2xl shadow-2xl flex items-center space-x-2 text-xs font-mono font-bold transition-all hover:scale-105 active:scale-95 group"
+        title="Open Developer Debug Console (debug=true active)"
       >
         <Terminal className="w-4 h-4 text-emerald-400 group-hover:animate-pulse" />
         <span>DEBUG CONSOLE</span>
@@ -309,9 +438,6 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
             {logs.filter((l) => l.type === 'error').length}
           </span>
         )}
-        <kbd className="hidden md:inline px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded text-[9px] border border-slate-700">
-          Alt+D
-        </kbd>
       </button>
     );
   }
@@ -321,15 +447,15 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
       className={`fixed z-50 bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-3xl text-white shadow-2xl flex flex-col transition-all duration-200 animate-in fade-in slide-in-from-bottom-5 ${
         isMaximized
           ? 'inset-2 md:inset-4'
-          : 'bottom-4 right-4 left-4 md:left-auto md:w-[680px] h-[520px]'
+          : 'bottom-4 right-4 left-4 md:left-auto md:w-[680px] h-[540px]'
       }`}
     >
       {/* Console Top Bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-slate-900/90 border-b border-slate-800 rounded-t-3xl font-mono text-xs">
-        <div className="flex items-center space-x-3">
+      <div className="flex flex-wrap items-center justify-between px-4 py-3 bg-slate-900/90 border-b border-slate-800 rounded-t-3xl font-mono text-xs gap-2">
+        <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-2 text-emerald-400 font-black">
             <Terminal className="w-4 h-4" />
-            <span>DEV DEBUG CONSOLE</span>
+            <span className="text-xs">DEBUG CONSOLE</span>
           </div>
 
           <span className="hidden sm:inline-block px-2 py-0.5 bg-slate-800 text-slate-300 rounded text-[10px] font-bold">
@@ -338,10 +464,10 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
         </div>
 
         {/* Tab Selection */}
-        <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
+        <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[10px] font-bold overflow-x-auto">
           <button
             onClick={() => setSelectedTab('console')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-1 rounded-lg transition-all ${
               selectedTab === 'console'
                 ? 'bg-emerald-500 text-slate-950 font-black'
                 : 'text-slate-400 hover:text-white'
@@ -351,7 +477,7 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
           </button>
           <button
             onClick={() => setSelectedTab('network')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-1 rounded-lg transition-all ${
               selectedTab === 'network'
                 ? 'bg-emerald-500 text-slate-950 font-black'
                 : 'text-slate-400 hover:text-white'
@@ -361,7 +487,7 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
           </button>
           <button
             onClick={() => setSelectedTab('system')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-1 rounded-lg transition-all ${
               selectedTab === 'system'
                 ? 'bg-emerald-500 text-slate-950 font-black'
                 : 'text-slate-400 hover:text-white'
@@ -371,13 +497,24 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
           </button>
           <button
             onClick={() => setSelectedTab('storage')}
-            className={`px-2.5 py-1 rounded-lg transition-all ${
+            className={`px-2 py-1 rounded-lg transition-all ${
               selectedTab === 'storage'
                 ? 'bg-emerald-500 text-slate-950 font-black'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
             Storage
+          </button>
+          <button
+            onClick={() => setSelectedTab('android')}
+            className={`px-2 py-1 rounded-lg transition-all flex items-center space-x-1 ${
+              selectedTab === 'android'
+                ? 'bg-cyan-500 text-slate-950 font-black'
+                : 'text-cyan-400 hover:bg-cyan-950/40'
+            }`}
+          >
+            <Smartphone className="w-3 h-3" />
+            <span>Android</span>
           </button>
         </div>
 
@@ -400,7 +537,7 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
         </div>
       </div>
 
-      {/* Sub-toolbar for Console & Network filters */}
+      {/* Sub-toolbar for Console filters */}
       {selectedTab === 'console' && (
         <div className="px-4 py-2 bg-slate-900/50 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
           {/* Search Input */}
@@ -649,9 +786,7 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
               </span>
               <div className="grid grid-cols-1 gap-1 text-[10px] text-slate-400">
                 <p>User Agent: {typeof navigator !== 'undefined' ? navigator.userAgent : 'Server Node'}</p>
-
                 <p>Online Status: {typeof navigator !== 'undefined' && navigator.onLine ? '🟢 Online' : '🔴 Offline'}</p>
-
                 <p>Screen Resolution: {typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight} px` : 'N/A'}</p>
               </div>
             </div>
@@ -707,6 +842,132 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
             )}
           </div>
         )}
+
+        {/* ANDROID MOBILE DEBUGGING HANDLER & GUIDE TAB */}
+        {selectedTab === 'android' && (
+          <div className="space-y-4 text-xs font-sans">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2 font-mono">
+              <div className="flex items-center space-x-2 text-cyan-400 font-bold text-xs">
+                <Smartphone className="w-4 h-4 text-cyan-400" />
+                <span>ANDROID PHONE DEBUGGING & MOBILE DEVTOOLS SUITE</span>
+              </div>
+              <span className="px-2 py-0.5 bg-cyan-950 text-cyan-300 border border-cyan-800 rounded text-[10px] font-bold">
+                MOBILE COMPATIBLE
+              </span>
+            </div>
+
+            {/* Quick Action Bar for Android */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono">
+              <button
+                onClick={handleToggleMobileDebugUrlParam}
+                className="p-3 bg-slate-900 border border-slate-800 hover:border-cyan-500/50 rounded-2xl flex items-center justify-between text-left transition-all group"
+              >
+                <div>
+                  <span className="text-xs font-black text-cyan-300 block flex items-center space-x-1.5">
+                    <Zap className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Toggle ?debug=true in URL</span>
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    {isDebugEnabled ? 'Disable debug URL parameter' : 'Reload page with ?debug=true active'}
+                  </p>
+                </div>
+                <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 shrink-0 ml-2" />
+              </button>
+
+              <button
+                onClick={handleToggleErudaMobileInspector}
+                className="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl flex items-center justify-between text-left transition-all group"
+              >
+                <div>
+                  <span className="text-xs font-black text-amber-300 block flex items-center space-x-1.5">
+                    <Code className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{isErudaActive ? 'Destroy Eruda DevTools' : 'Inject Eruda Mobile Console'}</span>
+                  </span>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    Floating mobile web inspector on screen
+                  </p>
+                </div>
+                <div className={`w-2.5 h-2.5 rounded-full ${isErudaActive ? 'bg-amber-400 animate-ping' : 'bg-slate-700'}`} />
+              </button>
+            </div>
+
+            {/* Android Share Logs */}
+            <div className="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-2 font-mono">
+              <div>
+                <span className="text-slate-200 font-bold block text-xs">Share Debug Logs via Android Native Share</span>
+                <p className="text-[10px] text-slate-400">Exports logs to WhatsApp, Gmail, Notes, or Drive</p>
+              </div>
+              <button
+                onClick={handleAndroidShareLogs}
+                className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-[11px] flex items-center space-x-1 shrink-0"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Share Logs</span>
+              </button>
+            </div>
+
+            {androidShareStatus && (
+              <div className="p-2 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-xl font-mono text-[11px] font-bold">
+                {androidShareStatus}
+              </div>
+            )}
+
+            {/* Step-by-Step Android Debug Methods */}
+            <div className="space-y-3 pt-1">
+              <h4 className="text-xs font-bold text-slate-300 font-mono uppercase tracking-wider">
+                5 Ways to Handle Debugging on Android Mobile:
+              </h4>
+
+              {/* Method 1: Multi-Touch Gestures */}
+              <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-2xl space-y-1">
+                <div className="flex items-center space-x-2 text-cyan-400 font-mono font-bold text-xs">
+                  <span className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-800 flex items-center justify-center text-[10px]">1</span>
+                  <span>Multi-Touch Screen Gestures (No Keyboard Needed)</span>
+                </div>
+                <p className="text-slate-300 text-[11px] pl-7">
+                  Touch <strong>3 fingers simultaneously</strong> anywhere on your Android phone screen to instantly summon this Debug Console. You can also tap 4 times rapidly in succession.
+                </p>
+              </div>
+
+              {/* Method 2: URL Query String */}
+              <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-2xl space-y-1">
+                <div className="flex items-center space-x-2 text-emerald-400 font-mono font-bold text-xs">
+                  <span className="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-800 flex items-center justify-center text-[10px]">2</span>
+                  <span>URL Parameter (`?debug=true`)</span>
+                </div>
+                <p className="text-slate-300 text-[11px] pl-7">
+                  Append <code className="bg-slate-950 text-amber-300 px-1 py-0.5 rounded font-mono">?debug=true</code> to the address bar in Chrome or Brave on Android to keep the console active across page reloads.
+                </p>
+              </div>
+
+              {/* Method 3: Chrome USB Remote Debugging */}
+              <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-2xl space-y-2">
+                <div className="flex items-center space-x-2 text-indigo-400 font-mono font-bold text-xs">
+                  <span className="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-800 flex items-center justify-center text-[10px]">3</span>
+                  <Usb className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Chrome Android USB Remote Debugging (`chrome://inspect`)</span>
+                </div>
+                <ol className="list-decimal list-inside space-y-1 text-slate-300 text-[11px] pl-7">
+                  <li>On Android: Open <strong>Settings &gt; System &gt; Developer options</strong> and turn on <strong>USB Debugging</strong>.</li>
+                  <li>Connect your Android phone to your PC via USB cable.</li>
+                  <li>Open Google Chrome on PC and navigate to <code className="bg-slate-950 text-cyan-300 px-1.5 py-0.5 rounded font-mono">chrome://inspect/#devices</code>.</li>
+                  <li>Click <strong>Inspect</strong> under your connected Android target tab to view full Chrome DevTools!</li>
+                </ol>
+              </div>
+
+              {/* Method 4: Eruda In-Browser Mobile DevTools */}
+              <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-2xl space-y-1">
+                <div className="flex items-center space-x-2 text-amber-400 font-mono font-bold text-xs">
+                  <span className="w-5 h-5 rounded-full bg-amber-950 border border-amber-800 flex items-center justify-center text-[10px]">4</span>
+                  <span>Eruda Mobile Console Injector</span>
+                </div>
+                <p className="text-slate-300 text-[11px] pl-7">
+                  Click the <strong>Inject Eruda Mobile Console</strong> button above to load a lightweight floating gear button on your Android screen. Tap it to inspect DOM elements, CSS styles, cookies, and local storage directly on mobile!
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Footer Status bar */}
@@ -716,8 +977,9 @@ export const DebugConsole: React.FC<DebugConsoleProps> = ({
           <span>HEAP: {memoryHeap} MB</span>
         </span>
         <span>FPS: {fps}</span>
-        <span className="hidden sm:inline text-slate-500">Press Alt + D to toggle</span>
+        <span className="hidden sm:inline text-slate-500">Android Touch 3-Finger Tap or Alt + D</span>
       </div>
     </div>
   );
 };
+
