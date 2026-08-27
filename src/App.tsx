@@ -146,6 +146,25 @@ import { GlobalPwaDocsView } from './components/GlobalPwaDocsView';
 import { SearchIndexingPortalView } from './components/SearchIndexingPortalView';
 import { AppStatusPortalView } from './components/AppStatusPortalView';
 import { DeepLinkingSetupView } from './components/DeepLinkingSetupView';
+import { QrGeneratorStudio } from './components/QrGeneratorStudio';
+import { RatingSystemView } from './components/RatingSystemView';
+import { EventPushManagerView } from './components/EventPushManagerView';
+import { VirtualTourExplorerView } from './components/VirtualTourExplorerView';
+import { OceanDollarWalletsView } from './components/OceanDollarWalletsView';
+import { OptimizedAuthFlowView } from './components/OptimizedAuthFlowView';
+import { StakingRoiChartsView } from './components/StakingRoiChartsView';
+import { OfflineSyncManagerView } from './components/OfflineSyncManagerView';
+import { OceanDollarFaqView } from './components/OceanDollarFaqView';
+import { AssetAuditTrailView } from './components/AssetAuditTrailView';
+import { CurrencyVisualizerView } from './components/CurrencyVisualizerView';
+import { VaultSecurityTipsView } from './components/VaultSecurityTipsView';
+import { CurrencyExportToolView } from './components/CurrencyExportToolView';
+import { OceanDollarStakingView } from './components/OceanDollarStakingView';
+import { MarineCurrencyHistoryView } from './components/MarineCurrencyHistoryView';
+import { CurrencySecurityTipsView } from './components/CurrencySecurityTipsView';
+import { OceanDollarDaoGovernancePortalView } from './components/OceanDollarDaoGovernancePortalView';
+import { CryptoCalculatorView } from './components/CryptoCalculatorView';
+import { DeveloperRevenueWhitepaperView } from './components/DeveloperRevenueWhitepaperView';
 import { ToastContainer, ToastItem } from './components/ToastContainer';
 import { REGIONAL_CLIMATE_ALERTS } from './data/southAsiaData';
 import { ClimateAlert } from './types';
@@ -522,6 +541,26 @@ export default function App() {
             onNavigateToTab={(tabId) => setActiveTab(tabId)}
           />
         )}
+        {activeTab === 'qr-code-generator' && <QrGeneratorStudio />}
+        {activeTab === 'rating-system' && <RatingSystemView />}
+        {activeTab === 'event-push-system' && <EventPushManagerView />}
+        {activeTab === 'virtual-tour-360' && <VirtualTourExplorerView />}
+        {activeTab === 'ocean-dollar-wallets' && <OceanDollarWalletsView />}
+        {activeTab === 'optimized-auth-flow' && <OptimizedAuthFlowView />}
+        {activeTab === 'staking-roi-charts' && <StakingRoiChartsView />}
+        {activeTab === 'offline-sync-manager' && <OfflineSyncManagerView />}
+        {activeTab === 'maritime-news-feed' && <MaritimeNewsFeedView />}
+        {activeTab === 'ocean-dollar-faq' && <OceanDollarFaqView />}
+        {activeTab === 'asset-audit-trail' && <AssetAuditTrailView />}
+        {activeTab === 'currency-visualizer' && <CurrencyVisualizerView />}
+        {activeTab === 'vault-security-tips' && <VaultSecurityTipsView />}
+        {activeTab === 'currency-export-tool' && <CurrencyExportToolView />}
+        {activeTab === 'ocean-dollar-staking' && <OceanDollarStakingView />}
+        {activeTab === 'marine-currency-history' && <MarineCurrencyHistoryView />}
+        {activeTab === 'currency-security-tips' && <CurrencySecurityTipsView />}
+        {activeTab === 'ocean-dollar-dao-governance' && <OceanDollarDaoGovernancePortalView />}
+        {activeTab === 'crypto-calculator' && <CryptoCalculatorView />}
+        {activeTab === 'developer-revenue-whitepaper' && <DeveloperRevenueWhitepaperView />}
         {activeTab === 'marine-ar-view' && <MarineArView />}
         {activeTab === 'marine-health' && <MarineHealthMapView />}
         {activeTab === 'crew-welfare' && <CrewWelfarePortalView />}

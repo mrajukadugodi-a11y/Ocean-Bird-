@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import oceanDollarNoteImg from '../assets/images/ocean_dollar_banknote_1787143582965.jpg';
+import { AssetAuthenticityBadge } from './AssetAuthenticityBadge';
 import { OceanDollarVisualAndSpecPortal } from './OceanDollarVisualAndSpecPortal';
 import { SovereignMintingAndQuantumLotteryPortal } from './SovereignMintingAndQuantumLotteryPortal';
 import { QuantumLotteryRiskFundAndEarningPortal } from './QuantumLotteryRiskFundAndEarningPortal';
@@ -431,6 +432,11 @@ export const AppDownloadAndSubscribePortal: React.FC = () => {
                 src={oceanDollarNoteImg}
                 alt="Ocean Dollar Physical Banknote Specimen"
                 className="w-full h-auto object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+              />
+              <AssetAuthenticityBadge
+                assetId="OD-SPECIMEN-100-ALPHA"
+                assetName="Ocean Dollar Physical $100 Polymer Banknote"
+                variant="watermark"
               />
               <div className="absolute bottom-3 left-3 bg-slate-950/90 backdrop-blur border border-amber-500/40 px-3 py-1 rounded-lg text-[10px] font-mono text-amber-300 font-bold shadow-lg">
                 OFFICIAL SPECIMEN #OD-2026-100-ALPHA

@@ -10,6 +10,8 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area, 
   CartesianGrid, PieChart as RechartsPie, Pie, Cell 
 } from 'recharts';
+import { CryptoCalculatorView } from './CryptoCalculatorView';
+import { DeveloperRevenueWhitepaperView } from './DeveloperRevenueWhitepaperView';
 
 export interface DaoProposal {
   id: string;
@@ -938,6 +940,12 @@ export const IodStakingDaoAndDevRevenuePortal: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* CRYPTO CALCULATOR */}
+      <CryptoCalculatorView />
+
+      {/* DEVELOPER REVENUE WHITEPAPER & EMAIL INFORMING */}
+      <DeveloperRevenueWhitepaperView />
 
       {/* 4. EMERGENCY UNLOCK CONFIRMATION MODAL */}
       {showEmergencyUnlockModal && (

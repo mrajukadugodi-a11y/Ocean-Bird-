@@ -89,6 +89,7 @@ import { CloudAnalyticsTelemetryHub } from './port/CloudAnalyticsTelemetryHub';
 import { DeploymentDocsHub } from './port/DeploymentDocsHub';
 import { DeveloperWalletHub } from './port/DeveloperWalletHub';
 import { CryptoWalletHub } from './port/CryptoWalletHub';
+import { OceanDollarVisualAndSpecPortal } from './OceanDollarVisualAndSpecPortal';
 
 // Types
 export interface BusinessWorkspace {
@@ -437,6 +438,7 @@ export const PortCommercialShoppingExhibitionView: React.FC<PortCommercialShoppi
     | 'DEPLOYMENT_DOCS'
     | 'DEV_WALLET'
     | 'CRYPTO_WALLET'
+    | 'OCEAN_DOLLAR_NOTES'
   >('SHOPPING');
 
   // Search & Filters
@@ -1136,6 +1138,21 @@ export const PortCommercialShoppingExhibitionView: React.FC<PortCommercialShoppi
           >
             <Cpu className="w-3.5 h-3.5 text-purple-400" />
             <span>Crypto Web3 Wallet</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('OCEAN_DOLLAR_NOTES');
+              hapticEngine.trigger('click');
+            }}
+            className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center space-x-1.5 ${
+              activeTab === 'OCEAN_DOLLAR_NOTES'
+                ? 'bg-amber-500 text-slate-950 shadow-lg font-black'
+                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+            }`}
+          >
+            <DollarSign className="w-3.5 h-3.5 text-amber-400" />
+            <span>Ocean Dollars Currency Notes ($10-$1000)</span>
           </button>
         </div>
       </div>
@@ -2595,6 +2612,11 @@ export const PortCommercialShoppingExhibitionView: React.FC<PortCommercialShoppi
       {/* 32. TAB: CRYPTO WEB3 WALLET & ON-CHAIN ASSETS            */}
       {/* ======================================================== */}
       {activeTab === 'CRYPTO_WALLET' && <CryptoWalletHub triggerToast={triggerToast} />}
+
+      {/* ======================================================== */}
+      {/* 33. TAB: OCEAN DOLLAR CURRENCY NOTES & SPECIMEN VAULT    */}
+      {/* ======================================================== */}
+      {activeTab === 'OCEAN_DOLLAR_NOTES' && <OceanDollarVisualAndSpecPortal />}
     </div>
   );
 };

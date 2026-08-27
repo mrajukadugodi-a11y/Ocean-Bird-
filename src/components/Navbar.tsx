@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import oceanBirdLogo from '../assets/images/ocean_bird_logo_1785499834795.jpg';
-import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon, Store, ShoppingBag } from 'lucide-react';
+import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon, Store, ShoppingBag, Star, Wallet, TrendingUp, History, Vote } from 'lucide-react';
 import { LanguageSelector } from '../utils/languageUtils';
 import { AutoTranslationBar } from './AutoTranslationBar';
 import { hapticEngine } from '../utils/hapticUtils';
@@ -157,7 +157,27 @@ export type NavTabType =
   | 'global-pwa-docs'
   | 'search-indexing-portal'
   | 'app-status-portal'
-  | 'deep-linking-setup';
+  | 'deep-linking-setup'
+  | 'qr-code-generator'
+  | 'rating-system'
+  | 'event-push-system'
+  | 'virtual-tour-360'
+  | 'ocean-dollar-wallets'
+  | 'optimized-auth-flow'
+  | 'staking-roi-charts'
+  | 'offline-sync-manager'
+  | 'maritime-news-feed'
+  | 'ocean-dollar-faq'
+  | 'asset-audit-trail'
+  | 'currency-visualizer'
+  | 'vault-security-tips'
+  | 'currency-export-tool'
+  | 'ocean-dollar-staking'
+  | 'marine-currency-history'
+  | 'currency-security-tips'
+  | 'ocean-dollar-dao-governance'
+  | 'crypto-calculator'
+  | 'developer-revenue-whitepaper';
 
 interface NavbarProps {
   activeTab: NavTabType;
@@ -340,6 +360,26 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'search-indexing-portal', label: 'Search Engine Indexing & Sitemap Suite', icon: Search, color: 'text-indigo-400', badge: 'SEO / SCHEMA' },
     { id: 'app-status-portal', label: 'Global App System Status & SLA Latency', icon: Activity, color: 'text-teal-400', badge: 'STATUS SLA' },
     { id: 'deep-linking-setup', label: 'Universal Deep Linking & Route Setup', icon: LinkIcon, color: 'text-cyan-400', badge: 'DEEP LINK' },
+    { id: 'qr-code-generator', label: 'Dynamic QR Code Generator & Scanner Studio', icon: QrCode, color: 'text-emerald-400', badge: 'QR STUDIO' },
+    { id: 'rating-system', label: 'Maritime Services Rating & Reviews System', icon: Star, color: 'text-amber-400', badge: '5★ REVIEWS' },
+    { id: 'event-push-system', label: 'Real-Time Event Push & Broadcast Engine', icon: Bell, color: 'text-cyan-400', badge: 'PUSH ALERTS' },
+    { id: 'virtual-tour-360', label: '360° Immersive Virtual Tour Explorer', icon: Compass, color: 'text-purple-400', badge: '360° VR' },
+    { id: 'ocean-dollar-wallets', label: 'Ocean Dollar Sovereign Multi-Wallets ($OD)', icon: Wallet, color: 'text-yellow-400', badge: '$OD WALLETS' },
+    { id: 'optimized-auth-flow', label: 'Firebase Auth Bridge & Maritime Role RBAC', icon: ShieldCheck, color: 'text-purple-400', badge: 'AUTH RBAC' },
+    { id: 'staking-roi-charts', label: 'Staking ROI Charts & Yield Pool Calculator', icon: TrendingUp, color: 'text-amber-400', badge: 'STAKING ROI' },
+    { id: 'offline-sync-manager', label: 'Offline High Seas Sync & IndexedDB Queue', icon: WifiOff, color: 'text-emerald-400', badge: 'OFFLINE SYNC' },
+    { id: 'maritime-news-feed', label: 'Live Global Maritime News & Security Feeds', icon: Newspaper, color: 'text-sky-400', badge: 'NEWS FEEDS' },
+    { id: 'ocean-dollar-faq', label: 'Ocean Dollar Knowledge Base & FAQ', icon: HelpCircle, color: 'text-yellow-400', badge: '$OD FAQ' },
+    { id: 'asset-audit-trail', label: 'Real-Time Asset Audit Trail & Vault Certificates', icon: FileCheck, color: 'text-emerald-400', badge: 'AUDIT TRAIL' },
+    { id: 'currency-visualizer', label: 'Interactive Currency Visualizer & Security Lab', icon: Eye, color: 'text-amber-400', badge: 'VISUALIZER' },
+    { id: 'vault-security-tips', label: 'Vault Security Tips & Defense Protocol', icon: ShieldAlert, color: 'text-purple-400', badge: 'SECURITY TIPS' },
+    { id: 'currency-export-tool', label: 'Currency Export Tool & Report Generator', icon: Download, color: 'text-cyan-400', badge: 'EXPORT TOOL' },
+    { id: 'ocean-dollar-staking', label: 'Ocean Dollar Staking & Yield Vaults ($OD)', icon: TrendingUp, color: 'text-amber-400', badge: '$OD STAKING' },
+    { id: 'marine-currency-history', label: 'Marine Currency History & $OD Genesis Timeline', icon: History, color: 'text-cyan-400', badge: 'CURRENCY HISTORY' },
+    { id: 'currency-security-tips', label: 'Currency Security Tips & Anti-Counterfeit Protocol', icon: ShieldAlert, color: 'text-purple-400', badge: 'CURRENCY SECURITY' },
+    { id: 'ocean-dollar-dao-governance', label: 'Ocean Dollar DAO Governance Portal (Proposals & Treasury)', icon: Vote, color: 'text-cyan-400', badge: 'DAO GOVERNANCE' },
+    { id: 'crypto-calculator', label: 'Crypto Calculator ($OD, Crypto, Staking & Dev Splits)', icon: DollarSign, color: 'text-cyan-400', badge: 'CRYPTO CALC' },
+    { id: 'developer-revenue-whitepaper', label: 'Developer Revenue Sharing Whitepaper & Email Informing', icon: FileText, color: 'text-amber-400', badge: 'DEV WHITEPAPER' },
     { id: 'ocean-gaming-lottery', label: 'Ocean Gaming & Entertainments Portal ($OD Money System)', icon: Trophy, color: 'text-amber-400', badge: '$OD GAMING' },
     { id: 'stocks-shares-bonds', label: 'Stocks, Shares & Bonds Sovereign Exchange (Specialties Portal)', icon: DollarSign, color: 'text-emerald-400', badge: 'STOCKS & BONDS' },
     { id: 'business-banking', label: 'Business Banking Portal (Vaults, Escrow, Lines of Credit & Payroll)', icon: Landmark, color: 'text-cyan-400', badge: 'BANKING' },
