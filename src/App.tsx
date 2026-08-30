@@ -165,6 +165,7 @@ import { CurrencySecurityTipsView } from './components/CurrencySecurityTipsView'
 import { OceanDollarDaoGovernancePortalView } from './components/OceanDollarDaoGovernancePortalView';
 import { CryptoCalculatorView } from './components/CryptoCalculatorView';
 import { DeveloperRevenueWhitepaperView } from './components/DeveloperRevenueWhitepaperView';
+import { OceanDesalinationAndResearchPortalView } from './components/OceanDesalinationAndResearchPortalView';
 import { ToastContainer, ToastItem } from './components/ToastContainer';
 import { REGIONAL_CLIMATE_ALERTS } from './data/southAsiaData';
 import { ClimateAlert } from './types';
@@ -561,6 +562,8 @@ export default function App() {
         {activeTab === 'ocean-dollar-dao-governance' && <OceanDollarDaoGovernancePortalView />}
         {activeTab === 'crypto-calculator' && <CryptoCalculatorView />}
         {activeTab === 'developer-revenue-whitepaper' && <DeveloperRevenueWhitepaperView />}
+        {activeTab === 'ocean-desalination-research' && <OceanDesalinationAndResearchPortalView />}
+        {activeTab === 'laboratory-practice-library' && <OceanDesalinationAndResearchPortalView />}
         {activeTab === 'marine-ar-view' && <MarineArView />}
         {activeTab === 'marine-health' && <MarineHealthMapView />}
         {activeTab === 'crew-welfare' && <CrewWelfarePortalView />}

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { LotteryWinningsBankingPortal } from './LotteryWinningsBankingPortal';
+
 import { AssetAuthenticityBadge } from './AssetAuthenticityBadge';
 import {
   Wallet,
@@ -348,6 +350,14 @@ export const OceanDollarWalletsView: React.FC = () => {
           </div>
         </div>
       </div>
+
+
+      {/* LOTTERY WINNINGS BANKING PORTAL SECTION */}
+      <LotteryWinningsBankingPortal
+        oceanDollarBalance={odBalance}
+        onBalanceChange={(newBal) => setOdBalance(newBal)}
+        triggerToast={showToast}
+      />
 
       {/* Transfer Modal Overlay */}
       {activeModal === 'TRANSFER' && (

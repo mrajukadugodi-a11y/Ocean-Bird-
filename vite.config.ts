@@ -29,17 +29,12 @@ export default defineConfig(() => {
       emptyOutDir: true,
       chunkSizeWarningLimit: 2000,
       assetsInlineLimit: 4096,
-      minify: 'esbuild',
+      minify: 'esbuild' as const,
       cssCodeSplit: true,
       target: 'es2022',
       sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-          },
           entryFileNames: 'assets/[name]-[hash].js',
           chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',

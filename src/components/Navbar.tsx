@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import oceanBirdLogo from '../assets/images/ocean_bird_logo_1785499834795.jpg';
-import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon, Store, ShoppingBag, Star, Wallet, TrendingUp, History, Vote } from 'lucide-react';
+import { Compass, Ship, Globe, Globe2, Bot, ThermometerSun, Radio, LifeBuoy, DollarSign, Briefcase, Fish, Palmtree, Menu, X, Smartphone, Layers, ShieldAlert, Waves, Anchor, Fuel, Navigation, ClipboardList, Bell, Siren, Map, Activity, BarChart3, Sun, Moon, Building2, CloudRain, Wifi, WifiOff, BookOpen, Crosshair, Headphones, StickyNote, Heart, Users, Eye, CloudSun, Download, FileCheck, PenTool, Sparkles, CheckSquare, ShieldCheck, Zap, Award, Database, PlaneTakeoff, Plane, Box, Container, Ticket, Calendar, Hotel, FileText, CreditCard, Fingerprint, HardDrive, Printer, Languages, Gauge, Newspaper, Wrench, Mic, HelpCircle, MessageSquarePlus, LayoutDashboard, Cloud, Share2, Truck, Key, Brain, Clock, QrCode, Scan, MapPin, Search, BatteryCharging, Battery, Wind, Play, Pause, RotateCcw, GraduationCap, Leaf, Stethoscope, Syringe, Trophy, Rocket, Landmark, Library, Pickaxe, Link as LinkIcon, UserPlus, Image as ImageIcon, Store, ShoppingBag, Star, Wallet, TrendingUp, History, Vote, Droplets, FlaskConical } from 'lucide-react';
 import { LanguageSelector } from '../utils/languageUtils';
 import { AutoTranslationBar } from './AutoTranslationBar';
 import { hapticEngine } from '../utils/hapticUtils';
@@ -177,7 +177,9 @@ export type NavTabType =
   | 'currency-security-tips'
   | 'ocean-dollar-dao-governance'
   | 'crypto-calculator'
-  | 'developer-revenue-whitepaper';
+  | 'developer-revenue-whitepaper'
+  | 'ocean-desalination-research'
+  | 'laboratory-practice-library';
 
 interface NavbarProps {
   activeTab: NavTabType;
@@ -380,6 +382,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'ocean-dollar-dao-governance', label: 'Ocean Dollar DAO Governance Portal (Proposals & Treasury)', icon: Vote, color: 'text-cyan-400', badge: 'DAO GOVERNANCE' },
     { id: 'crypto-calculator', label: 'Crypto Calculator ($OD, Crypto, Staking & Dev Splits)', icon: DollarSign, color: 'text-cyan-400', badge: 'CRYPTO CALC' },
     { id: 'developer-revenue-whitepaper', label: 'Developer Revenue Sharing Whitepaper & Email Informing', icon: FileText, color: 'text-amber-400', badge: 'DEV WHITEPAPER' },
+    { id: 'ocean-desalination-research', label: 'Ocean Water Desalination & Soft Water Conversion (India & Global Institutes Progress)', icon: Droplets, color: 'text-cyan-400', badge: 'DESALINATION PORTAL' },
+    { id: 'laboratory-practice-library', label: 'Water Science Laboratory Practice & Scientific Research Library Portal', icon: FlaskConical, color: 'text-purple-400', badge: 'LAB & LIBRARY' },
     { id: 'ocean-gaming-lottery', label: 'Ocean Gaming & Entertainments Portal ($OD Money System)', icon: Trophy, color: 'text-amber-400', badge: '$OD GAMING' },
     { id: 'stocks-shares-bonds', label: 'Stocks, Shares & Bonds Sovereign Exchange (Specialties Portal)', icon: DollarSign, color: 'text-emerald-400', badge: 'STOCKS & BONDS' },
     { id: 'business-banking', label: 'Business Banking Portal (Vaults, Escrow, Lines of Credit & Payroll)', icon: Landmark, color: 'text-cyan-400', badge: 'BANKING' },

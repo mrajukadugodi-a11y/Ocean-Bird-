@@ -79,6 +79,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateAndDownloadPdf } from '../utils/pdfExporter';
+import { NotificationStatusTracker } from './NotificationStatusTracker';
 
 export interface CitizenParticipant {
   citizenId: string;
@@ -2351,6 +2352,39 @@ export function PublicCitizenParticipantPortalView() {
                   USER ID &amp; PASSWORD AUTH
                 </span>
               </div>
+
+              {/* REGISTRATION EMAIL/SMS DISPATCH & BANK CUSTODY NOTICE BANNER */}
+              <div className="p-4 rounded-2xl bg-slate-950 border-2 border-amber-500/40 space-y-3 font-sans">
+                <div className="flex items-start space-x-3">
+                  <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <strong className="text-white text-xs font-mono block">Registered Yesterday &amp; Need Email/SMS Confirmation?</strong>
+                    <p className="text-slate-300 text-xs">
+                      If you registered in the General Public Portal and did not receive an email/SMS confirmation, please check your Gmail Spam/Promotions folder or view your active status log in the <strong className="text-amber-300 font-mono">Ocean Dollar Staking &amp; Gold Yield Vaults</strong> portal.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <span>
+                    <strong className="text-amber-400 font-mono">🏦 Gold Custody &amp; Bank Backing:</strong> 100% of Ocean Dollar gold coins are backed by physical 24K gold bullion held in <strong className="text-white">UBS Group AG (Zurich)</strong>, <strong className="text-white">DBS Bank (Singapore)</strong>, and <strong className="text-white">DMCC (Dubai)</strong> vaults.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const navEvent = new CustomEvent('nav-tab-change', { detail: 'ocean-dollar-staking' });
+                      window.dispatchEvent(navEvent);
+                    }}
+                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black font-mono text-[10px] uppercase rounded-xl shrink-0 transition-all flex items-center space-x-1"
+                  >
+                    <span>View Staking Status &amp; FAQs</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Notification Status Tracker Component */}
+              <NotificationStatusTracker />
 
               {/* SIGNUP FORM WITH USER ID AND PASSWORD */}
               {authMode === 'SIGNUP' && (

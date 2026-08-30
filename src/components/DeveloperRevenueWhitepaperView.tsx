@@ -20,7 +20,8 @@ import {
   AlertCircle,
   Check,
   Settings,
-  Server
+  Server,
+  Coins
 } from 'lucide-react';
 import { hapticEngine } from '../utils/hapticUtils';
 
@@ -279,6 +280,49 @@ export const DeveloperRevenueWhitepaperView: React.FC<DeveloperRevenueWhitepaper
                   <p>• Smart Contract Transaction Receipt Hash (0x...)</p>
                   <p>• Firebase Infrastructure Health Certificate</p>
                   <p>• UNCLOS Zero-Tax Compliance Statement</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Section 4: Developer Benefits from Staking Performance */}
+          <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+            <button
+              onClick={() => handleToggleAccordion('sec-4')}
+              className="w-full flex justify-between items-center text-left"
+            >
+              <h4 className="font-black text-white text-sm uppercase flex items-center space-x-2">
+                <Coins className="w-4 h-4 text-amber-400" />
+                <span>4. Direct Developer Benefits from Staking Performance</span>
+              </h4>
+              {whitepaperAccordionOpen['sec-4'] ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+            </button>
+
+            {whitepaperAccordionOpen['sec-4'] && (
+              <div className="space-y-3 text-slate-300 font-sans text-xs pt-2 border-t border-slate-900">
+                <p className="leading-relaxed">
+                  As public staking volume and pool performance increase across short-term, 90-day, and 365-day 24K Swiss Gold Vaults, developers benefit across 4 major financial &amp; technical vectors:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[11px]">
+                  <div className="p-3 bg-slate-900 rounded-xl border border-amber-500/30 space-y-1">
+                    <strong className="text-amber-300 block">💰 0.25% Staking Performance Liquidity Royalty</strong>
+                    <p className="text-slate-400 text-[10px] font-sans">Collected directly from all active staking deposits &amp; yield disbursements to fund continuous developer code maintenance.</p>
+                  </div>
+
+                  <div className="p-3 bg-slate-900 rounded-xl border border-cyan-500/30 space-y-1">
+                    <strong className="text-cyan-300 block">📈 10.00% Developer Guild Revenue Share</strong>
+                    <p className="text-slate-400 text-[10px] font-sans">10% of total protocol yields (crane tariffs, demurrage fees, seigniorage) automatically stream into developer payouts.</p>
+                  </div>
+
+                  <div className="p-3 bg-slate-900 rounded-xl border border-purple-500/30 space-y-1">
+                    <strong className="text-purple-300 block">⚡ 10.00% Firebase &amp; Cloud Infra Coverage</strong>
+                    <p className="text-slate-400 text-[10px] font-sans">Staking fees automatically cover backend cloud nodes, Firestore DB, and API proxy servers for 99.99% uptime.</p>
+                  </div>
+
+                  <div className="p-3 bg-slate-900 rounded-xl border border-emerald-500/30 space-y-1">
+                    <strong className="text-emerald-300 block">📜 1.50% Gold Vault Seigniorage Royalty</strong>
+                    <p className="text-slate-400 text-[10px] font-sans">365-Day Gold Vault lockups mint new gold-backed $OD coins, providing developers with a 1.50% seigniorage minting fee.</p>
+                  </div>
                 </div>
               </div>
             )}

@@ -1525,6 +1525,64 @@ export const WeatherAlertMonitor: React.FC = () => {
 
         {/* LIVE REGIONAL SEVERE CLIMATE ALERTS FEED (2 COLS) */}
         <div className="lg:col-span-2 space-y-4">
+          {/* 24-HOUR CLIMATE ALERT FREQUENCY SPARKLINE TREND CHART */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 font-mono shadow-xl relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+              <div className="flex items-center space-x-2">
+                <div className="p-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-400">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white flex items-center space-x-2">
+                    <span>24-Hour Climate Alert Frequency Sparkline</span>
+                    <span className="text-[9px] bg-sky-500/20 text-sky-300 border border-sky-500/30 px-2 py-0.5 rounded-full font-bold">
+                      24h Frequency Telemetry
+                    </span>
+                  </h4>
+                  <p className="text-[10px] text-slate-400 font-sans">
+                    Hourly alert volume trends across Bay of Bengal, Arabian Sea, & Palk Strait
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 text-[10px] text-slate-300">
+                <span>Peak: <strong className="text-rose-400 font-bold">12:00 UTC (16 Alerts)</strong></span>
+                <span>Trend: <strong className="text-emerald-400 font-bold">+18.4% ↗</strong></span>
+              </div>
+            </div>
+
+            <div className="h-16 w-full pt-1">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={hourlyTimeAnalysisData} margin={{ top: 2, right: 5, left: -25, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="weatherSparklineGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="hourLabel" tick={{ fill: '#64748b', fontSize: 8 }} axisLine={{ stroke: '#334155' }} tickLine={false} />
+                  <YAxis hide domain={[0, 'dataMax + 2']} />
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const d = payload[0].payload;
+                        return (
+                          <div className="bg-slate-950 border border-sky-500/40 p-2 rounded-xl text-[10px] font-mono space-y-1 shadow-xl">
+                            <div className="text-sky-400 font-bold border-b border-slate-800 pb-0.5">{d.hourLabel} Window</div>
+                            <div className="text-white font-bold">{d.total} Active Alerts</div>
+                            <div className="text-slate-400 text-[9px]">{d.Critical} Critical • {d.Warning} Warning • {d.Advisory} Advisory</div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Area type="monotone" dataKey="total" stroke="#38bdf8" strokeWidth={2} fillOpacity={1} fill="url(#weatherSparklineGrad)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono">
             <div className="flex items-center space-x-3">
               {/* SELECT ALL CHECKBOX (FEATURE 4: BATCH SELECTION) */}

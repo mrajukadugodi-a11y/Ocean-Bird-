@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { LotteryWinningsBankingPortal } from './LotteryWinningsBankingPortal';
+
 import {
   CreditCard,
   Wallet,
@@ -83,7 +85,7 @@ const INITIAL_TRANSACTIONS: PaymentTransactionRecord[] = [
 export const OnlinePaymentGatewayPortal: React.FC = () => {
   const { currency, formatPrice } = useCurrency();
 
-  const [portalTab, setPortalTab] = useState<'PAY_CHECKOUT' | 'TRANSACTION_HISTORY' | 'GATEWAY_SECURITY'>('PAY_CHECKOUT');
+  const [portalTab, setPortalTab] = useState<'PAY_CHECKOUT' | 'TRANSACTION_HISTORY' | 'GATEWAY_SECURITY' | 'LOTTERY_WINNINGS_BANK'>('PAY_CHECKOUT');
 
   // Checkout Form State
   const [invoiceRefInput, setInvoiceRefInput] = useState('INV-2026-99120');
@@ -283,6 +285,11 @@ export const OnlinePaymentGatewayPortal: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* ================= TAB 4: LOTTERY WINNINGS BANKING ================= */}
+      {portalTab === 'LOTTERY_WINNINGS_BANK' && (
+        <LotteryWinningsBankingPortal />
+      )}
 
       {/* ================= TAB 1: MAKE A PAYMENT & CHECKOUT ================= */}
       {portalTab === 'PAY_CHECKOUT' && (

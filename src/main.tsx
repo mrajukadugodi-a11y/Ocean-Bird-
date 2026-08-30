@@ -1,6 +1,6 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import App from './App.tsx';
+import App from './App';
 import './index.css';
 import { registerFlightServiceWorker } from './utils/offlineFlightCache';
 import { ErrorBoundary } from './components/ErrorBoundary';
